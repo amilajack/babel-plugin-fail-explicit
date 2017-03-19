@@ -6,10 +6,6 @@
   }]],
   "plugins": [
     "syntax-flow",
-    ["flow-runtime", {
-      "assert": true,
-      "annotate": true
-    }],
     "transform-decorators-legacy",
     "transform-runtime",
     "add-module-exports",
