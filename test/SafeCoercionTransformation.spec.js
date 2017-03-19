@@ -3,6 +3,8 @@ import dedent from 'dedent';
 import babelPluginFailExplicit from '../src/index';
 
 
+/* eslint import/prefer-default-export: 0 */
+
 const babelConfig = {
   compact: false,
   plugins: [
@@ -14,7 +16,7 @@ const babelConfig = {
   }
 };
 
-function transform(code: string): string {
+export function transform(code: string): string {
   return dedent(babel.transform(
     code,
     babelConfig
