@@ -1,0 +1,78 @@
+{
+  "name": "babel-plugin-fail-explicit",
+  "version": "0.0.0",
+  "description": "A babel plugin that kills javascript's coercion and other silent failure",
+  "main": "lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/amilajack/babel-plugin-fail-explicit.git"
+  },
+  "scripts": {
+    "build": "cross-env NODE_ENV=production rm -rf lib && mkdir lib && babel src/index.js --out-file lib/index.js",
+    "flow": "flow check",
+    "flow-typed": "flow-typed install",
+    "lint": "eslint --cache --format=node_modules/eslint-formatter-pretty .",
+    "spec": "cross-env NODE_ENV=test npm run build && jest",
+    "test": "cross-env NODE_ENV=test npm run lint && npm run spec",
+    "version": "npm run build"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  },
+  "keywords": [
+    "babel",
+    "plugin",
+    "fail",
+    "explicit",
+    "coercion",
+    "silent"
+  ],
+  "author": "Amila Welihinda",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/amilajack/babel-plugin-fail-explicit/issues"
+  },
+  "files": [
+    "lib"
+  ],
+  "homepage": "https://github.com/amilajack/babel-plugin-fail-explicit#readme",
+  "devDependencies": {
+    "babel-cli": "^6.24.0",
+    "babel-core": "^6.24.0",
+    "babel-eslint": "^7.1.1",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-plugin-flow-runtime": "^0.10.0",
+    "babel-plugin-transform-async-to-bluebird": "^1.0.1",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-plugin-transform-es2015-modules-umd": "^6.24.0",
+    "babel-plugin-transform-flow-strip-types": "^6.22.0",
+    "babel-plugin-transform-promise-to-bluebird": "^1.1.1",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-polyfill": "^6.23.0",
+    "babel-preset-env": "^1.2.2",
+    "babel-register": "^6.24.0",
+    "babel-traverse": "^6.23.1",
+    "babel-types": "^6.23.0",
+    "chai": "^3.5.0",
+    "cross-env": "^3.2.4",
+    "dedent": "^0.7.0",
+    "eslint": "^3.18.0",
+    "eslint-config-bliss": "^1.0.2",
+    "eslint-formatter-pretty": "^1.1.0",
+    "flow-bin": "^0.42.0",
+    "flow-runtime": "^0.10.0",
+    "flow-typed": "^2.0.0",
+    "jest-cli": "^19.0.2"
+  },
+  "engines": {
+    "node": ">=4.x",
+    "npm": ">=3.x"
+  },
+  "devEngines": {
+    "node": ">=6.x",
+    "npm": ">=4.x"
+  },
+  "dependencies": {
+    "safe-access-check": "^0.0.5"
+  }
+}
