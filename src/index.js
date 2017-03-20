@@ -1,28 +1,36 @@
 import type { NodePath } from 'babel-traverse';
 
 
-/* eslint func-names: 0 */
+/* eslint no-restricted-syntax: 0, fp/no-loops: 0, no-continue: 0, func-names: 0, fp/no-let: 0 */
 
 export default function ({ types: t }) {
   return {
     visitor: {
       Program(path: NodePath) {
-        const importDeclaration = t.importDeclaration(
-          [t.importDefaultSpecifier(t.identifier('moo'))],
-          t.stringLiteral('foo')
+        const requireCallExpression = t.callExpression(
+          t.identifier('require'),
+          [
+            t.stringLiteral('safe-access-check')
+          ]
         );
 
-        importDeclaration.importKind = 'value';
+        let last;
 
-        path.unshiftContainer(
-          'body',
-          t.callExpression(
-            t.identifier('require'),
-            [
-              t.stringLiteral('safe-access-check')
-            ]
-          )
-        );
+        for (const item of path.get('body')) {
+          if (item.isDirective() || item.isImportDeclaration()) {
+            last = item;
+            continue;
+          }
+
+          item.insertBefore(requireCallExpression);
+          return;
+        }
+
+        if (last) {
+          last.insertAfter(requireCallExpression);
+        } else {
+          path.get('body').unshiftContainer('body', requireCallExpression);
+        }
       },
 
       /**

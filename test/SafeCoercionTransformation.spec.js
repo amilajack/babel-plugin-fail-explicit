@@ -61,6 +61,54 @@ describe('SafeCoercion', () => {
     ));
   });
 
+  it('should insert require after import statements', () => {
+    expect(transform(
+      `
+      import fs from 'fs';
+
+      var array = 1;
+      var obj = '2';
+      array + obj;
+      `
+    ))
+    .toEqual(dedent(
+      `
+      import fs from 'fs';
+
+      require("safe-access-check")
+
+      var array = 1;
+      var obj = '2';
+      safeCoerce(array, "+", obj);
+      `
+    ));
+
+    expect(transform(
+      `
+      import fs from 'fs';
+      import path from 'path';
+      import module from './module';
+
+      var array = 1;
+      var obj = '2';
+      array + obj;
+      `
+    ))
+    .toEqual(dedent(
+      `
+      import fs from 'fs';
+      import path from 'path';
+      import module from './module';
+
+      require("safe-access-check")
+
+      var array = 1;
+      var obj = '2';
+      safeCoerce(array, "+", obj);
+      `
+    ));
+  });
+
   it('should wrap function expressions', () => {
     expect(transform(
       `
