@@ -43,13 +43,13 @@ describe('LeetCode', () => {
     ))
     .toEqual(dedent(
       `
+require("safe-access-check")
+
 // @flow
 import SumTimelineMethod from '../LeetCode/Easy/371';
 import ZigZag from '../LeetCode/Easy/6';
 import SingleNumber from '../LeetCode/Easy/136';
 import CanWinNim from '../LeetCode/Easy/292';
-
-require("safe-access-check")
 
 describe('LeetCode', () => {
   test('SumTimelineMethod()', () => {

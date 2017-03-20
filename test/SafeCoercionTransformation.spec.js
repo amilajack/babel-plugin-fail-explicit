@@ -23,44 +23,7 @@ export function transform(code: string): string {
   ).code);
 }
 
-describe('SafeCoercion', () => {
-  it('should wrap safeCoerce on binary expressions', () => {
-    expect(transform(
-      `
-      var array = [];
-      var obj = {};
-      array + obj;`
-    ))
-    .toEqual(dedent(
-      `
-      require("safe-access-check")
-
-      var array = [];
-      var obj = {};
-      safeCoerce(array, "+", obj);
-      `
-    ));
-  });
-
-  it('should wrap expressions', () => {
-    expect(transform(
-      `
-      var array = 1;
-      var obj = '2';
-      array + obj;
-      `
-    ))
-    .toEqual(dedent(
-      `
-      require("safe-access-check")
-
-      var array = 1;
-      var obj = '2';
-      safeCoerce(array, "+", obj);
-      `
-    ));
-  });
-
+describe.skip('Import statements', () => {
   it('should insert require after import statements', () => {
     expect(transform(
       `
@@ -100,6 +63,45 @@ describe('SafeCoercion', () => {
       import path from 'path';
       import module from './module';
 
+      require("safe-access-check")
+
+      var array = 1;
+      var obj = '2';
+      safeCoerce(array, "+", obj);
+      `
+    ));
+  });
+});
+
+describe('SafeCoercion', () => {
+  it('should wrap safeCoerce on binary expressions', () => {
+    expect(transform(
+      `
+      var array = [];
+      var obj = {};
+      array + obj;`
+    ))
+    .toEqual(dedent(
+      `
+      require("safe-access-check")
+
+      var array = [];
+      var obj = {};
+      safeCoerce(array, "+", obj);
+      `
+    ));
+  });
+
+  it('should wrap expressions', () => {
+    expect(transform(
+      `
+      var array = 1;
+      var obj = '2';
+      array + obj;
+      `
+    ))
+    .toEqual(dedent(
+      `
       require("safe-access-check")
 
       var array = 1;
