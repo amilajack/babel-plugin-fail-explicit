@@ -7,30 +7,12 @@ export default function ({ types: t }) {
   return {
     visitor: {
       Program(path: NodePath) {
-        const requireCallExpression = t.callExpression(
+        path.unshiftContainer('body', t.callExpression(
           t.identifier('require'),
           [
             t.stringLiteral('safe-access-check')
           ]
-        );
-
-        let last;
-
-        for (const item of path.get('body')) {
-          if (item.isDirective() || item.isImportDeclaration()) {
-            last = item;
-            continue;
-          }
-
-          item.insertBefore(requireCallExpression);
-          return;
-        }
-
-        if (last) {
-          last.insertAfter(requireCallExpression);
-        } else {
-          path.get('body').unshiftContainer('body', requireCallExpression);
-        }
+        ));
       },
 
       /**
