@@ -43,7 +43,7 @@ describe('LeetCode', () => {
     ))
     .toEqual(dedent(
       `
-require("safe-access-check")
+import { safeCoerce } from "safe-access-check";
 
 // @flow
 import SumTimelineMethod from '../LeetCode/Easy/371';

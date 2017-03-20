@@ -7,9 +7,15 @@ export default function ({ types: t }) {
   return {
     visitor: {
       Program(path: NodePath) {
-        const identifier = t.identifier('safeAccessCheck');
-        const importDefaultSpecifier = t.importDefaultSpecifier(identifier);
-        const importDeclaration = t.importDeclaration([importDefaultSpecifier], t.stringLiteral('safe-access-check'));
+        const importDeclaration = t.importDeclaration(
+          [
+            t.importSpecifier(
+              t.identifier('safeCoerce'),
+              t.identifier('safeCoerce')
+            )
+          ],
+          t.stringLiteral('safe-access-check')
+        );
         path.unshiftContainer('body', importDeclaration);
       },
 

@@ -7,6 +7,7 @@ import babelPluginFailExplicit from '../src/index';
 
 const babelConfig = {
   compact: false,
+  sourceType: 'module',
   plugins: [
     babelPluginFailExplicit
   ],
@@ -38,7 +39,7 @@ describe.skip('Import statements', () => {
       `
       import fs from 'fs';
 
-      require("safe-access-check")
+      import { safeCoerce } from "safe-access-check";
 
       var array = 1;
       var obj = '2';
@@ -63,7 +64,7 @@ describe.skip('Import statements', () => {
       import path from 'path';
       import module from './module';
 
-      require("safe-access-check")
+      import { safeCoerce } from "safe-access-check";
 
       var array = 1;
       var obj = '2';
@@ -83,7 +84,7 @@ describe('SafeCoercion', () => {
     ))
     .toEqual(dedent(
       `
-      require("safe-access-check")
+      import { safeCoerce } from "safe-access-check";
 
       var array = [];
       var obj = {};
@@ -102,7 +103,7 @@ describe('SafeCoercion', () => {
     ))
     .toEqual(dedent(
       `
-      require("safe-access-check")
+      import { safeCoerce } from "safe-access-check";
 
       var array = 1;
       var obj = '2';
@@ -121,7 +122,7 @@ describe('SafeCoercion', () => {
     ))
     .toEqual(dedent(
       `
-      require("safe-access-check")
+      import { safeCoerce } from "safe-access-check";
 
       var fn1 = function () {};
       var fn2 = function () {};
@@ -138,7 +139,7 @@ describe('SafeCoercion', () => {
     ))
     .toEqual(dedent(
       `
-      require("safe-access-check")
+      import { safeCoerce } from "safe-access-check";
 
       safeCoerce(fn1, "+", fn2);
       `
@@ -152,8 +153,7 @@ describe('SafeCoercion', () => {
     .toEqual(dedent(
       // Don't fix the spacing in this test. Cant get it to work without it
       `
-      require("safe-access-check")
-
+      import { safeCoerce } from "safe-access-check";
       function some() {
       return safeCoerce(fn1, "+", fn2);
       }`
@@ -166,8 +166,7 @@ describe('SafeCoercion', () => {
     ))
     .toEqual(dedent(
       `
-      require("safe-access-check")
-
+      import { safeCoerce } from "safe-access-check";
       fn1(safeCoerce(fn1, "+", fn2), safeCoerce(fn1, "+", fn2));
       `
     ));
@@ -182,7 +181,7 @@ describe('SafeCoercion', () => {
     ))
     .toEqual(dedent(
       `
-      require("safe-access-check")
+      import { safeCoerce } from "safe-access-check";
 
       fn1(safeCoerce(fn1(safeCoerce(fn1, "+", fn2)), "+", fn1(safeCoerce(fn1, "+", fn2))));
       `
@@ -195,7 +194,7 @@ describe('SafeCoercion', () => {
     ))
     .toEqual(dedent(
       `
-      require("safe-access-check")
+      import { safeCoerce } from "safe-access-check";
 
       fn1(fn1(safeCoerce(fn1, "+", fn2)));
       `
@@ -209,8 +208,7 @@ describe('SafeCoercion', () => {
       ))
       .toEqual(dedent(
         `
-        require("safe-access-check")
-
+        import { safeCoerce } from "safe-access-check";
         some instanceof foo;
         `
       ));
@@ -222,8 +220,7 @@ describe('SafeCoercion', () => {
       ))
       .toEqual(dedent(
         `
-        require("safe-access-check")
-
+        import { safeCoerce } from "safe-access-check";
         some === foo;
         `
       ));
@@ -235,8 +232,7 @@ describe('SafeCoercion', () => {
       ))
       .toEqual(dedent(
         `
-        require("safe-access-check")
-
+        import { safeCoerce } from "safe-access-check";
         some == foo;
         `
       ));
@@ -248,8 +244,7 @@ describe('SafeCoercion', () => {
       ))
       .toEqual(dedent(
         `
-        require("safe-access-check")
-
+        import { safeCoerce } from "safe-access-check";
         some !== foo;
         `
       ));
@@ -261,8 +256,7 @@ describe('SafeCoercion', () => {
       ))
       .toEqual(dedent(
         `
-        require("safe-access-check")
-
+        import { safeCoerce } from "safe-access-check";
         some != foo;
         `
       ));
@@ -274,8 +268,7 @@ describe('SafeCoercion', () => {
       ))
       .toEqual(dedent(
         `
-        require("safe-access-check")
-
+        import { safeCoerce } from "safe-access-check";
         some in foo;
         `
       ));
@@ -289,8 +282,7 @@ describe('SafeCoercion', () => {
       ))
       .toEqual(dedent(
         `
-        require("safe-access-check")
-
+        import { safeCoerce } from "safe-access-check";
         safeCoerce(obj, "+=", arr);
         `
       ));
@@ -302,8 +294,7 @@ describe('SafeCoercion', () => {
       ))
       .toEqual(dedent(
         `
-        require("safe-access-check")
-
+        import { safeCoerce } from "safe-access-check";
         safeCoerce(obj, "-=", arr);
         `
       ));
@@ -315,7 +306,7 @@ describe('SafeCoercion', () => {
       ))
       .toEqual(dedent(
         `
-        require(safe-access-check)
+        import { safeCoerce } from "safe-access-check";
         safeCoerce(obj,"=-", arr);
         `
       ));
@@ -327,7 +318,7 @@ describe('SafeCoercion', () => {
       ))
       .toEqual(dedent(
         `
-        require(safe-access-check)
+        import { safeCoerce } from "safe-access-check";
         safeCoerce(obj,"=+", arr);
         `
       ));

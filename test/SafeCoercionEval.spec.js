@@ -1,8 +1,32 @@
+import * as babel from 'babel-core';
 import { expect as chaiExpect } from 'chai';
-import { transform } from './SafeCoercionTransformation.spec';
+import babelPluginFailExplicit from '../src/index';
 
 
 /* eslint no-eval: 0 */
+
+const babelConfig = {
+  compact: false,
+  sourceType: 'module',
+  presets: [
+    'es2015'
+  ],
+  plugins: [
+    'add-module-exports',
+    babelPluginFailExplicit
+  ],
+  generatorOpts: {
+    quotes: 'double',
+    compact: false
+  }
+};
+
+function transform(code: string): string {
+  return babel.transform(
+    code,
+    babelConfig
+  ).code;
+}
 
 describe('SafeCoercionEval', () => {
   it('should not fail on safe coercion', () => {
@@ -50,13 +74,13 @@ describe('SafeCoercionEval', () => {
     chaiExpect(() => {
       eval(transform(`
         function some() {
-          var array = {};
-          var obj = [];
+          var array = [];
+          var obj = {};
           return array + obj;
         }
         some()
       `));
     })
-    .to.throw(TypeError, 'Unexpected coercion of type "object" and type "array" using "+" operator');
+    .to.throw(TypeError, 'Unexpected coercion of type "array" and type "object" using "+" operator');
   });
 });
