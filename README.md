@@ -9,16 +9,23 @@ babel-plugin-fail-explicit
 
 **⚠️ Experimental ⚠️**
 
+## Roadmap
+- [x] Fail on unsafe coercion
+- [ ] Fail on unsafe property access
+
 ## Installation
 ```bash
 npm install --save-dev babel-plugin-fail-explicit
+npm install --save-dev babel-plugin-add-module-exports
 ```
 
+## Setup
 ```
 // .babelrc
 {
   "plugins": [
-    "fail-explicit"
+    "fail-explicit",
+    "add-module-exports"
   ]
 }
 ```

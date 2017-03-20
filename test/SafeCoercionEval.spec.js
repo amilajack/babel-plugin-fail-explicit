@@ -81,6 +81,15 @@ describe('SafeCoercionEval', () => {
     .to.throw(TypeError, 'Unexpected coercion of type "null" and type "null" using "+" operator');
   });
 
+  it('should fail with NaN', () => {
+    chaiExpect(() => {
+      eval(transform(`
+        (NaN) + (NaN)
+      `));
+    })
+    .to.throw(TypeError, 'Unexpected coercion of type "NaN" and type "NaN" using "+" operator');
+  });
+
   it('should fail with undefined', () => {
     chaiExpect(() => {
       eval(transform(`
