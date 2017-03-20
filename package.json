@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-fail-explicit",
-  "version": "0.0.2",
+  "version": "0.0.3-0",
   "description": "A babel plugin that kills javascript's coercion and other silent failure",
   "main": "lib/index.js",
   "repository": {
