@@ -7,12 +7,10 @@ export default function ({ types: t }) {
   return {
     visitor: {
       Program(path: NodePath) {
-        path.unshiftContainer('body', t.callExpression(
-          t.identifier('require'),
-          [
-            t.stringLiteral('safe-access-check')
-          ]
-        ));
+        const identifier = t.identifier('safeAccessCheck');
+        const importDefaultSpecifier = t.importDefaultSpecifier(identifier);
+        const importDeclaration = t.importDeclaration([importDefaultSpecifier], t.stringLiteral('safe-access-check'));
+        path.unshiftContainer('body', importDeclaration);
       },
 
       /**

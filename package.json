@@ -72,5 +72,8 @@
   },
   "dependencies": {
     "safe-access-check": "^0.0.5"
+  },
+  "peerDependencies": {
+    "babel-plugin-add-module-exports": "^0.2.1"
   }
 }
