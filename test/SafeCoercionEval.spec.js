@@ -38,6 +38,58 @@ describe('SafeCoercionEval', () => {
     .toEqual('some12');
   });
 
+  it('should fail on coercion with += operator', () => {
+    chaiExpect(() => {
+      eval(transform(`
+        let some = {};
+        some += 'moo';
+      `));
+    })
+    .to.throw(TypeError, 'Unexpected coercion of type "object" and type "string" using "+=" operator');
+  });
+
+  it('should fail on coercion in constructor', () => {
+    chaiExpect(() => {
+      eval(transform(`
+        new String('some' + {})
+      `));
+    })
+    .to.throw(TypeError, 'Unexpected coercion of type "string" and type "object" using "+" operator');
+  });
+
+  it('should pass on coercion of new String() concatenation', () => {
+    eval(transform(`
+      (new String('some' + 'some')) + (new String('some' + 'some'))
+    `));
+  });
+
+  it('should fail with new operator', () => {
+    chaiExpect(() => {
+      eval(transform(`
+        (new Array()) + (new Array())
+      `));
+    })
+    .to.throw(TypeError, 'Unexpected coercion of type "array" and type "array" using "+" operator');
+  });
+
+  it('should fail with null', () => {
+    chaiExpect(() => {
+      eval(transform(`
+        (null) + (null)
+      `));
+    })
+    .to.throw(TypeError, 'Unexpected coercion of type "null" and type "null" using "+" operator');
+  });
+
+  it('should fail with undefined', () => {
+    chaiExpect(() => {
+      eval(transform(`
+        (undefined) + (undefined)
+      `));
+    })
+    .to.throw(TypeError, 'Unexpected coercion of type "undefined" and type "undefined" using "+" operator');
+  });
+
   it('should not fail on safe coercion in function declaration', () => {
     expect(eval(transform(`
       function some() {
