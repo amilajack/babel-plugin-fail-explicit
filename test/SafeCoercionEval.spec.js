@@ -3,9 +3,9 @@ import { expect as chaiExpect } from 'chai';
 import babelPluginFailExplicit from '../src/index';
 
 
-/* eslint no-eval: 0 */
+/* eslint no-eval: 0, import/prefer-default-export: 0 */
 
-const babelConfig = {
+export const babelConfig = {
   compact: false,
   sourceType: 'module',
   presets: [
@@ -21,7 +21,7 @@ const babelConfig = {
   }
 };
 
-function transform(code: string): string {
+export function transform(code: string): string {
   return babel.transform(
     code,
     babelConfig
