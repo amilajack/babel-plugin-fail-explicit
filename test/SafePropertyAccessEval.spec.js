@@ -54,6 +54,16 @@ describe('Basic Tests', () => {
       `));
     });
 
+    it('should pass on valid iife as property access', () => {
+      transform(`
+        (() => {
+          const fn = () => 1
+          const some = [1, 2]
+          return some[fn()]
+        })()
+      `);
+    });
+
     it('should fail on out out of bounds property access', () => {
       chaiExpect(() => {
         eval(transform(`
@@ -116,6 +126,34 @@ describe('Basic Tests', () => {
         `));
       })
       .to.throw(TypeError, 'Property "NaN" does not exist in "Array"');
+    });
+
+    describe('Class', () => {
+      it('should fail on incorrect class instance property access', () => {
+        chaiExpect(() => {
+          eval(transform(`
+            class Foo {
+              soo() {}
+            }
+            const some = new Foo()
+            some.loo
+          `));
+        })
+        .to.throw(TypeError, 'Property "loo" does not exist in "Foo"');
+      });
+
+      it('should fail on incorrect class static property access', () => {
+        chaiExpect(() => {
+          eval(transform(`
+            class Foo {
+              static soo() {}
+            }
+            const some = new Foo()
+            Foo.loo
+          `));
+        })
+        .to.throw(TypeError, 'Property "loo" does not exist in "Foo"');
+      });
     });
 
     it('should fail on undefined property access', () => {

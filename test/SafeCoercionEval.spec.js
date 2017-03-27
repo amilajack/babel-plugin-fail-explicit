@@ -25,7 +25,8 @@ export function transform(code: string): string {
   return babel.transform(
     code,
     babelConfig
-  ).code;
+  )
+  .code;
 }
 
 describe('SafeCoercionEval', () => {
@@ -36,6 +37,20 @@ describe('SafeCoercionEval', () => {
       array + obj;
     `)))
     .toEqual('some12');
+  });
+
+  it('should not fail on template literal coercion', () => {
+    /* eslint no-template-curly-in-string: 0 */
+    expect(eval(transform(
+      [
+        '(() => {',
+        'const some = { doo: "foo" };',
+        'return `${some.doo}foo`;',
+        '})()'
+      ]
+      .join('')
+    )))
+    .toEqual('foofoo');
   });
 
   it('should fail on coercion with += operator', () => {
