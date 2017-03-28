@@ -7,9 +7,6 @@ describe('SafePropertyAccessEval', () => {
   for (const config of configs) {
     describe(`Config "${config.testConfigName}"`, () => {
       function transform(code: string): string {
-        if (config.testConfigName === 'transform-es2015-modules-umd') {
-          console.log('asdfaasdffadsasdff');
-        }
         delete config.testConfigName;
         return babel.transform(
           code,
