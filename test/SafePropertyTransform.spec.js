@@ -1,5 +1,4 @@
 import * as babel from 'babel-core';
-import { expect as chaiExpect } from 'chai';
 import dedent from 'dedent';
 import babelPluginFailExplicit from '../src/index';
 
