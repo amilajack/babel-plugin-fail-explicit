@@ -45,7 +45,7 @@ export default function ({ types: t }) {
           id = object;
         }
 
-        if (id.callee) {
+        if (t.isCallExpression(id)) {
           if (id.callee.name === 'require') {
             return;
           }
