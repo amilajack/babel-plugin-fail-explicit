@@ -9,7 +9,9 @@ export const babelConfig = {
   compact: false,
   sourceType: 'module',
   plugins: [
-    babelPluginFailExplicit
+    [babelPluginFailExplicit, {
+      commonJSImports: true
+    }]
   ],
   generatorOpts: {
     quotes: 'double',
