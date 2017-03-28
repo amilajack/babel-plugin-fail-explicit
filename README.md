@@ -11,13 +11,14 @@ babel-plugin-fail-explicit
 
 ## Roadmap
 - [x] Fail on unsafe coercion
-- [ ] Fail on unsafe property access
+- [x] Fail on unsafe property access
 - [ ] Allow for configuration of strictness
+
+**⚠️ This doesn't work as expected with `"transform-es2015-modules-umd"` at the moment ⚠️**
 
 ## Installation
 ```bash
 npm install --save-dev babel-plugin-fail-explicit
-npm install --save-dev babel-plugin-add-module-exports
 ```
 
 ## Setup
@@ -25,8 +26,7 @@ npm install --save-dev babel-plugin-add-module-exports
 // .babelrc
 {
   "plugins": [
-    "fail-explicit",
-    "add-module-exports"
+    "fail-explicit"
   ]
 }
 ```
