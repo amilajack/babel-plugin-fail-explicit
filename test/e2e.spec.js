@@ -1,9 +1,9 @@
 // import { execSync } from 'child_process';
 import dedent from 'dedent';
-import { transform } from './SafeCoercionTransformation.spec';
+import { transform } from './SafeCoercionEval.spec';
 
 
-describe('e2e', () => {
+describe.skip('e2e', () => {
   // beforeAll(() => {
   //   execSync('git clone https://github.com/amilajack/async.git ./e2e/object-assign');
   // });
