@@ -10,36 +10,45 @@ export default function ({ types: t }) {
   return {
     visitor: {
       Program(path: NodePath) {
-        path.unshiftContainer('body', t.importDeclaration(
-          [
-            t.importSpecifier(
+        path.unshiftContainer('body', [
+          t.variableDeclaration('var', [
+            t.variableDeclarator(
               t.identifier('safeCoerce'),
-              t.identifier('safeCoerce')
+              t.memberExpression(t.callExpression(t.identifier('require'),
+                [t.stringLiteral('safe-access-check')]), t.identifier('safeCoerce'))
             )
-          ],
-          t.stringLiteral('safe-access-check')
-        ));
-
-        path.unshiftContainer('body', t.importDeclaration(
-          [
-            t.importSpecifier(
+          ])
+        ]);
+        path.unshiftContainer('body', [
+          t.variableDeclaration('var', [
+            t.variableDeclarator(
               t.identifier('safePropertyAccess'),
-              t.identifier('safePropertyAccess')
+              t.memberExpression(t.callExpression(t.identifier('require'),
+                [t.stringLiteral('safe-access-check')]), t.identifier('safePropertyAccess'))
             )
-          ],
-          t.stringLiteral('safe-access-check')
-        ));
+          ])
+        ]);
       },
 
       MemberExpression(path) {
-        let obj = path.node;
+        let object = path.node;
         const items = [];
         let id;
 
-        while ('property' in obj) {
-          items.push(obj.property.value || obj.property.name);
-          obj = obj.object;
-          id = obj;
+        while (t.isMemberExpression(object)) {
+          if (object.computed === false) {
+            items.push(t.stringLiteral(object.property.name));
+          } else {
+            items.push(object.property);
+          }
+          object = object.object;
+          id = object;
+        }
+
+        if (id.callee) {
+          if (id.callee.name === 'require') {
+            return;
+          }
         }
 
         path.replaceWith(
@@ -47,45 +56,13 @@ export default function ({ types: t }) {
             t.identifier('safePropertyAccess'),
             [
               t.arrayExpression(
-                items.reverse().map((item: string | number) => {
-                  if (!(typeof item === 'number' || typeof item === 'string')) {
-                    throw new TypeError(`Cannot access object using property "${item}"`);
-                  }
-                  return typeof item === 'number'
-                    ? t.numericLiteral(item)
-                    : t.stringLiteral(item);
-                })
+                items.reverse()
               ),
-              t.identifier(id.name)
+              t.identifier(id.name || id.callee.name)
             ]
           )
         );
       },
-
-      // @TODO
-      // MemberExpression(path) {
-      //   let obj = path.node;
-      //   const items = [];
-      //   let id;
-
-      //   while ('property' in obj) {
-      //     items.push(obj.property);
-      //     obj = obj.object;
-      //     id = obj;
-      //   }
-
-      //   path.replaceWith(
-      //     t.callExpression(
-      //       t.identifier('safePropertyAccess'),
-      //       [
-      //         t.arrayExpression(
-      //           items.reverse()
-      //         ),
-      //         t.identifier(id.name)
-      //       ]
-      //     )
-      //   );
-      // },
 
       /**
        * @TODO: Support BinaryExpression|AssignmentExpression|UnaryExpression

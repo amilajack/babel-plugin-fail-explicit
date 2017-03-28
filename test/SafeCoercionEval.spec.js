@@ -8,11 +8,7 @@ import babelPluginFailExplicit from '../src/index';
 export const babelConfig = {
   compact: false,
   sourceType: 'module',
-  presets: [
-    'es2015'
-  ],
   plugins: [
-    'add-module-exports',
     babelPluginFailExplicit
   ],
   generatorOpts: {

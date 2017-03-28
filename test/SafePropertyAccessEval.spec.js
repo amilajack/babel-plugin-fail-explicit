@@ -1,5 +1,5 @@
 import * as babel from 'babel-core';
-import { expect as chaiExpect } from 'chai';
+import { expect } from 'chai';
 import babelPluginFailExplicit from '../src/index';
 
 
@@ -8,12 +8,8 @@ import babelPluginFailExplicit from '../src/index';
 export const babelConfig = {
   compact: false,
   sourceType: 'module',
-  presets: [
-    'es2015'
-  ],
   plugins: [
-    babelPluginFailExplicit,
-    'add-module-exports'
+    babelPluginFailExplicit
   ],
   generatorOpts: {
     quotes: 'double',
@@ -31,7 +27,7 @@ export function transform(code: string): string {
 describe('Basic Tests', () => {
   describe('Object Access', () => {
     it('should fail on incorrect property access', () => {
-      chaiExpect(() => {
+      expect(() => {
         eval(transform(`
           const some = {}
           some.soo
@@ -65,7 +61,7 @@ describe('Basic Tests', () => {
     });
 
     it('should fail on out out of bounds property access', () => {
-      chaiExpect(() => {
+      expect(() => {
         eval(transform(`
           const some = []
           some[2]
@@ -75,20 +71,20 @@ describe('Basic Tests', () => {
     });
 
     it('should fail on multiple dimentional array access', () => {
-      chaiExpect(() => {
+      expect(() => {
         eval(transform(`
           const some = [[[]]]
           some[0][0][2]
         `));
       })
-      .to.throw(TypeError, '"Array[2]" is out of bounds');
+      .to.throw(TypeError, '"Array[0][0][2]" is out of bounds');
     });
 
     it('should pass on valid multiple dimentional array access', () => {
       expect(eval(transform(`
         (() => {
           const some = [[[['moo']]]]
-          return some[0][0][0]
+          return some[0][0][0][0]
         })()
       `)))
       .to.equal('moo');
@@ -97,7 +93,7 @@ describe('Basic Tests', () => {
 
   describe('Mixed Access', () => {
     it('should fail on incorrect property access', () => {
-      chaiExpect(() => {
+      expect(() => {
         eval(transform(`
           const some = {}
           some.soo
@@ -119,18 +115,18 @@ describe('Basic Tests', () => {
 
   describe('Invalid Access', () => {
     it('should fail on NaN property access', () => {
-      chaiExpect(() => {
+      expect(() => {
         eval(transform(`
-          const some = []
+          const some = [0]
           some[NaN]
         `));
       })
-      .to.throw(TypeError, 'Property "NaN" does not exist in "Array"');
+      .to.throw(TypeError, 'Property "NaN" does not exist in "Array[NaN]"');
     });
 
     describe('Class', () => {
       it('should fail on incorrect class instance property access', () => {
-        chaiExpect(() => {
+        expect(() => {
           eval(transform(`
             class Foo {
               soo() {}
@@ -139,11 +135,20 @@ describe('Basic Tests', () => {
             some.loo
           `));
         })
-        .to.throw(TypeError, 'Property "loo" does not exist in "Foo"');
+        .to.throw(TypeError, 'Property "loo" does not exist in "Object"');
+        expect(() => {
+          eval(transform(`
+            class Foo {
+              soo() {}
+            }
+            Foo.loo
+          `));
+        })
+        .to.throw(TypeError, 'Property "loo" does not exist in "Function"');
       });
 
       it('should fail on incorrect class static property access', () => {
-        chaiExpect(() => {
+        expect(() => {
           eval(transform(`
             class Foo {
               static soo() {}
@@ -152,38 +157,38 @@ describe('Basic Tests', () => {
             Foo.loo
           `));
         })
-        .to.throw(TypeError, 'Property "loo" does not exist in "Foo"');
+        .to.throw(TypeError, 'Property "loo" does not exist in "Function"');
       });
     });
 
     it('should fail on undefined property access', () => {
-      chaiExpect(() => {
+      expect(() => {
         eval(transform(`
           const some = []
           some[undefined]
         `));
       })
-      .to.throw(TypeError, 'Property "undefined" does not exist in "Array"');
+      .to.throw(TypeError, 'Type "undefined" cannot be used to access Array');
     });
 
     it('should fail on null property access', () => {
-      chaiExpect(() => {
+      expect(() => {
         eval(transform(`
-          const some = []
+          const some = [0]
           some[null]
         `));
       })
-      .to.throw(TypeError, 'Property "null" does not exist in "Array"');
+      .to.throw(TypeError, 'Type "null" cannot be used to access Array');
     });
 
     it('should fail on object property access', () => {
-      chaiExpect(() => {
+      expect(() => {
         eval(transform(`
           const some = []
           some[{}]
         `));
       })
-      .to.throw(TypeError, 'Property "{}" does not exist in "Array"');
+      .to.throw(TypeError, 'Type "object" cannot be used to access Array');
     });
   });
 });

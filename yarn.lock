@@ -232,7 +232,7 @@ babel-core@^6.0.0, babel-core@^6.24.0:
     slash "^1.0.0"
     source-map "^0.5.0"
 
-babel-eslint@^7.2.0, babel-eslint@^7.2.1:
+babel-eslint@^7.2.1:
   version "7.2.1"
   resolved "https://registry.yarnpkg.com/babel-eslint/-/babel-eslint-7.2.1.tgz#079422eb73ba811e3ca0865ce87af29327f8c52f"
   dependencies:
@@ -1292,7 +1292,7 @@ eslint-config-airbnb-base@^11.1.1:
   version "11.1.2"
   resolved "https://registry.yarnpkg.com/eslint-config-airbnb-base/-/eslint-config-airbnb-base-11.1.2.tgz#259209a7678bf693e31cbe8f953f206b6aa7ccc3"
 
-eslint-config-bliss@^1.0.2:
+eslint-config-bliss@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/eslint-config-bliss/-/eslint-config-bliss-1.0.3.tgz#bc49524b56ba617c0a6977db55fa94c2d90aba7b"
   dependencies:
@@ -3103,9 +3103,9 @@ rx-lite@^3.1.2:
   version "3.1.2"
   resolved "https://registry.yarnpkg.com/rx-lite/-/rx-lite-3.1.2.tgz#19ce502ca572665f3b647b10939f97fd1615f102"
 
-safe-access-check@^0.0.9:
-  version "0.0.9"
-  resolved "https://registry.yarnpkg.com/safe-access-check/-/safe-access-check-0.0.9.tgz#8e1fa7da959e54ab45737e325c8dd3ff4bb08d6c"
+safe-access-check@^0.0.11:
+  version "0.0.11"
+  resolved "https://registry.yarnpkg.com/safe-access-check/-/safe-access-check-0.0.11.tgz#0e627e68d58c098742b05d7995ad358338934938"
 
 safe-buffer@^5.0.1:
   version "5.0.1"
