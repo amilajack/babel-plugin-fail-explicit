@@ -1,6 +1,15 @@
+import * as babel from 'babel-core';
 import dedent from 'dedent';
-import { transform } from './SafeCoercionEval.spec';
+import { defaultConfig } from './SafeCoercionEval.spec';
 
+
+function transform(code: string): string {
+  return babel.transform(
+    code,
+    defaultConfig
+  )
+  .code;
+}
 
 describe('e2e', () => {
   it.skip('should test multiple exports', () => {

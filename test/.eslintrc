@@ -1,0 +1,9 @@
+{
+  "rules": {
+    "fp/no-loops": 0,
+    "fp/no-delete": 0,
+    "import/prefer-default-export": 0,
+    "no-restricted-syntax": 0,
+    "no-eval": 0
+  }
+}
