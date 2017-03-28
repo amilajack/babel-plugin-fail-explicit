@@ -892,8 +892,8 @@ caniuse-db@1.0.30000626:
   resolved "https://registry.yarnpkg.com/caniuse-db/-/caniuse-db-1.0.30000626.tgz#44363dc86857efaf758fea9faef6a15ed93d8f33"
 
 caniuse-db@^1.0.30000624, caniuse-db@^1.0.30000639:
-  version "1.0.30000641"
-  resolved "https://registry.yarnpkg.com/caniuse-db/-/caniuse-db-1.0.30000641.tgz#4810fc75fbb3f5b3bd75c2d6a94d894a7c709873"
+  version "1.0.30000644"
+  resolved "https://registry.yarnpkg.com/caniuse-db/-/caniuse-db-1.0.30000644.tgz#9d7eccf1ef1d11cbd6741b9fb390f9923ff42261"
 
 caseless@~0.12.0:
   version "0.12.0"
@@ -1036,8 +1036,8 @@ content-type-parser@^1.0.1:
   resolved "https://registry.yarnpkg.com/content-type-parser/-/content-type-parser-1.0.1.tgz#c3e56988c53c65127fb46d4032a3a900246fdc94"
 
 convert-source-map@^1.1.0:
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/convert-source-map/-/convert-source-map-1.4.0.tgz#e3dad195bf61bfe13a7a3c73e9876ec14a0268f3"
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/convert-source-map/-/convert-source-map-1.5.0.tgz#9acd70851c6d5dfdd93d9282e5edf94a03ff46b5"
 
 core-js@^2.4.0:
   version "2.4.1"
@@ -3103,9 +3103,9 @@ rx-lite@^3.1.2:
   version "3.1.2"
   resolved "https://registry.yarnpkg.com/rx-lite/-/rx-lite-3.1.2.tgz#19ce502ca572665f3b647b10939f97fd1615f102"
 
-safe-access-check@^0.0.11:
-  version "0.0.11"
-  resolved "https://registry.yarnpkg.com/safe-access-check/-/safe-access-check-0.0.11.tgz#0e627e68d58c098742b05d7995ad358338934938"
+safe-access-check@^0.0.12:
+  version "0.0.12"
+  resolved "https://registry.yarnpkg.com/safe-access-check/-/safe-access-check-0.0.12.tgz#23e2739be93f23473500baeb543fa05a3322bb48"
 
 safe-buffer@^5.0.1:
   version "5.0.1"
@@ -3412,8 +3412,8 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
 
 uglify-js@^2.6:
-  version "2.8.16"
-  resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-2.8.16.tgz#d286190b6eefc6fd65eb0ecac6551e0b0e8839a4"
+  version "2.8.17"
+  resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-2.8.17.tgz#b68ea00a1cef853960bc99b8dec7740d2553f20b"
   dependencies:
     source-map "~0.5.1"
     yargs "~3.10.0"

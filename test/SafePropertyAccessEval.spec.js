@@ -188,7 +188,7 @@ describe('Basic Tests', () => {
           some[{}]
         `));
       })
-      .to.throw(TypeError, 'Type "object" cannot be used to access Array');
+      .to.throw(TypeError, 'Type "Object" cannot be used to access Array');
     });
   });
 });

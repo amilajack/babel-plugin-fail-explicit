@@ -26,6 +26,56 @@ export function transform(code: string): string {
 }
 
 describe('SafeCoercionEval', () => {
+  describe('Comparison', () => {
+    it('should allow for greater than comparison', () => {
+      expect(eval(transform(
+        `
+        (() => {
+          return 'b' > 'aaa'
+        })()
+        `
+      )))
+      .toEqual(true);
+
+      expect(eval(transform(
+        `
+        (() => {
+          const foo = 1
+          const bar = 1
+          return foo + bar
+        })()
+        `
+      )))
+      .toEqual(2);
+
+      expect(eval(transform(
+        `
+        (() => {
+          const foo = 2
+          const bar = 1
+          return foo >= bar
+        })()
+        `
+      )))
+      .toEqual(true);
+    });
+
+    it('should fail on comparison of unexpected types', () => {
+      chaiExpect(() => {
+        eval(transform(
+          `
+          (() => {
+            const foo = {}
+            const bar = []
+            return foo + bar
+          })()
+          `
+        ));
+      })
+      .to.throw(TypeError, 'Unexpected coercion of type "Object" and type "Array" using "+" operator');
+    });
+  });
+
   it('should not fail on safe coercion', () => {
     expect(eval(transform(`
       var array = 'some';
@@ -56,7 +106,7 @@ describe('SafeCoercionEval', () => {
         some += 'moo';
       `));
     })
-    .to.throw(TypeError, 'Unexpected coercion of type "object" and type "string" using "+=" operator');
+    .to.throw(TypeError, 'Unexpected coercion of type "Object" and type "string" using "+=" operator');
   });
 
   it('should fail on coercion in constructor', () => {
@@ -65,7 +115,7 @@ describe('SafeCoercionEval', () => {
         new String('some' + {})
       `));
     })
-    .to.throw(TypeError, 'Unexpected coercion of type "string" and type "object" using "+" operator');
+    .to.throw(TypeError, 'Unexpected coercion of type "string" and type "Object" using "+" operator');
   });
 
   it('should pass on coercion of new String() concatenation', () => {
@@ -80,7 +130,7 @@ describe('SafeCoercionEval', () => {
         (new Array()) + (new Array())
       `));
     })
-    .to.throw(TypeError, 'Unexpected coercion of type "array" and type "array" using "+" operator');
+    .to.throw(TypeError, 'Unexpected coercion of type "Array" and type "Array" using "+" operator');
   });
 
   it('should fail with null', () => {
@@ -130,7 +180,7 @@ describe('SafeCoercionEval', () => {
         array + obj;
       `));
     })
-    .to.throw(TypeError, 'Unexpected coercion of type "array" and type "object" using "+" operator');
+    .to.throw(TypeError, 'Unexpected coercion of type "Array" and type "Object" using "+" operator');
 
     chaiExpect(() => {
       eval(transform(`
@@ -139,7 +189,7 @@ describe('SafeCoercionEval', () => {
         array() + obj();
       `));
     })
-    .to.throw(TypeError, 'Unexpected coercion of type "array" and type "object" using "+" operator');
+    .to.throw(TypeError, 'Unexpected coercion of type "Array" and type "Object" using "+" operator');
   });
 
   it('should fail on unsafe coercion in function declaration', () => {
@@ -153,6 +203,6 @@ describe('SafeCoercionEval', () => {
         some()
       `));
     })
-    .to.throw(TypeError, 'Unexpected coercion of type "array" and type "object" using "+" operator');
+    .to.throw(TypeError, 'Unexpected coercion of type "Array" and type "Object" using "+" operator');
   });
 });

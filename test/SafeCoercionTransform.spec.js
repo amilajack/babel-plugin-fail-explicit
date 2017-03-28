@@ -25,6 +25,33 @@ export function transform(code: string): string {
 }
 
 describe('SafeCoercion', () => {
+  describe('Comparison', () => {
+    it('should fail on comparison of unexpected types', () => {
+      expect(transform(
+        `
+        'b' > 'aaa';
+        'some' > 'a';
+        (() => {
+          return 'b' > 'aaa'
+        })()
+        `
+      ))
+      .toEqual(dedent(
+        `
+        var safePropertyAccess = require("safe-access-check").safePropertyAccess;
+
+        var safeCoerce = require("safe-access-check").safeCoerce;
+
+        safeCoerce('b', ">", 'aaa');
+        safeCoerce('some', ">", 'a');
+        (() => {
+        return safeCoerce('b', ">", 'aaa');
+        })();
+        `
+      ));
+    });
+  });
+
   it('should wrap safeCoerce on binary expressions', () => {
     expect(transform(
       `
