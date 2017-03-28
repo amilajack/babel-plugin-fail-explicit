@@ -45,6 +45,59 @@ describe('SafePropertyTransform', () => {
       `));
     });
 
+    it('should safely transform AssignmentExpression', () => {
+      expect(transform(`
+        const some = {
+          foo: 'doo'
+        }
+        some.foo = 'some'
+      `))
+      .toEqual(dedent(`
+        var safePropertyAccess = require("safe-access-check").safePropertyAccess;
+
+        var safeCoerce = require("safe-access-check").safeCoerce;
+
+        const some = {
+        foo: 'doo'
+        };
+        some.foo = 'some';
+      `));
+
+      expect(transform(`
+        const some = {
+          foo: 'doo'
+        }
+        some.foo = some.doo
+      `))
+      .toEqual(dedent(`
+        var safePropertyAccess = require("safe-access-check").safePropertyAccess;
+
+        var safeCoerce = require("safe-access-check").safeCoerce;
+
+        const some = {
+        foo: 'doo'
+        };
+        some.foo = safePropertyAccess(["doo"], some);
+      `));
+
+      expect(transform(`
+        const some = {
+          foo: 'doo'
+        }
+        some.foo.moo = some.doo
+      `))
+      .toEqual(dedent(`
+        var safePropertyAccess = require("safe-access-check").safePropertyAccess;
+
+        var safeCoerce = require("safe-access-check").safeCoerce;
+
+        const some = {
+        foo: 'doo'
+        };
+        safePropertyAccess(["foo"], some).moo = safePropertyAccess(["doo"], some);
+      `));
+    });
+
     it('should perform basic array access transform', () => {
       expect(transform(`
         const some = []

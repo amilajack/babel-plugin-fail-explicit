@@ -8,7 +8,7 @@
     "url": "git+https://github.com/amilajack/babel-plugin-fail-explicit.git"
   },
   "scripts": {
-    "build": "cross-env NODE_ENV=production rm -rf lib && mkdir lib && babel src/index.js --out-file lib/index.js",
+    "build": "cross-env NODE_ENV=production rm -rf lib && mkdir lib && babel src/index.js --out-file lib/index.js --source-maps",
     "flow": "flow check",
     "flow-typed": "flow-typed install",
     "lint": "eslint --cache --format=node_modules/eslint-formatter-pretty .",

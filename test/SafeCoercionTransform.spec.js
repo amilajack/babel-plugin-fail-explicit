@@ -24,62 +24,6 @@ export function transform(code: string): string {
   ).code);
 }
 
-describe.skip('Import statements', () => {
-  it('should insert require after import statements', () => {
-    expect(transform(
-      `
-      import fs from 'fs';
-
-      var array = 1;
-      var obj = '2';
-      array + obj;
-      `
-    ))
-    .toEqual(dedent(
-      `
-      import fs from 'fs';
-
-      var safePropertyAccess = require("safe-access-check").safePropertyAccess;
-
-      var safeCoerce = require("safe-access-check").safeCoerce;
-
-
-      var array = 1;
-      var obj = '2';
-      safeCoerce(array, "+", obj);
-      `
-    ));
-
-    expect(transform(
-      `
-      import fs from 'fs';
-      import path from 'path';
-      import module from './module';
-
-      var array = 1;
-      var obj = '2';
-      array + obj;
-      `
-    ))
-    .toEqual(dedent(
-      `
-      import fs from 'fs';
-      import path from 'path';
-      import module from './module';
-
-      var safePropertyAccess = require("safe-access-check").safePropertyAccess;
-
-      var safeCoerce = require("safe-access-check").safeCoerce;
-
-
-      var array = 1;
-      var obj = '2';
-      safeCoerce(array, "+", obj);
-      `
-    ));
-  });
-});
-
 describe('SafeCoercion', () => {
   it('should wrap safeCoerce on binary expressions', () => {
     expect(transform(
