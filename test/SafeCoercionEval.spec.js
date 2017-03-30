@@ -22,38 +22,114 @@ export const configs = [
     testConfigName: 'default'
   },
   {
+    testConfigName: 'commonjs',
+    plugins: [[babelPluginFailExplicit, { commonJSImports: true }]]
+  },
+  {
     testConfigName: 'es2015 preset',
     presets: ['es2015']
   },
   {
+    testConfigName: 'babel preset node 4',
+    presets: [['env', { targets: { node: 4 } }]],
+    plugins: [
+      [babelPluginFailExplicit, { commonJSImports: true }]
+    ]
+  },
+  {
+    testConfigName: 'babel preset node 5',
+    presets: [['env', { targets: { node: 5 } }]],
+    plugins: [
+      [babelPluginFailExplicit, { commonJSImports: true }]
+    ]
+  },
+  {
+    testConfigName: 'babel preset node 6',
+    presets: [['env', { targets: { node: 6 } }]],
+    plugins: [
+      [babelPluginFailExplicit, { commonJSImports: true }]
+    ]
+  },
+  {
+    testConfigName: 'babel preset node 7',
+    presets: [['env', { targets: { node: 7 } }]],
+    plugins: [
+      [babelPluginFailExplicit, { commonJSImports: true }]
+    ]
+  },
+  {
+    testConfigName: 'transform-es2015-modules-commonjs',
+    plugins: [
+      [babelPluginFailExplicit, { commonJSImports: true }],
+      'transform-es2015-modules-commonjs'
+    ]
+  },
+  {
+    testConfigName: 'transform-flow-strip-types',
+    presets: ['es2015'],
+    plugins: [
+      'transform-flow-strip-types',
+      [babelPluginFailExplicit, { commonJSImports: true }]
+    ]
+  },
+  {
     testConfigName: 'add-module-exports',
-    plugins: [babelPluginFailExplicit, 'add-module-exports']
+    plugins: [
+      [babelPluginFailExplicit, { commonJSImports: true }],
+      'add-module-exports',
+      'transform-es2015-modules-commonjs'
+    ]
   },
   {
     testConfigName: 'transform-es2015-modules-umd',
-    plugins: [babelPluginFailExplicit, 'transform-es2015-modules-umd']
+    plugins: [
+      [babelPluginFailExplicit, { commonJSImports: true }],
+      'transform-es2015-modules-umd'
+    ]
+  },
+  {
+    testConfigName: 'transform-async-to-bluebird',
+    plugins: [
+      [babelPluginFailExplicit, { commonJSImports: true }],
+      'transform-async-to-bluebird'
+    ]
   }
-  // {
-  //   testConfigName: 'transform-async-to-bluebird',
-  //   plugins: ['transform-async-to-bluebird']
-  // },
-  // {
-  //   testConfigName: 'transform-flow-strip-types',
-  //   plugins: ['transform-flow-strip-types']
-  // }
 ];
 
+const debug = false;
 
 describe('SafeCoercionEval', () => {
   for (const config of configs) {
     describe(`Config "${config.testConfigName}"`, () => {
-      function transform(code: string): string {
+      function transform(source: string): string {
+        const { testConfigName } = config;
         delete config.testConfigName;
-        return babel.transform(
-          code,
+
+        const { code } = babel.transform(
+          source,
           Object.assign({}, defaultConfig, config)
-        )
-        .code;
+        );
+
+        if (debug) {
+          console.log(`
+            Config: ${testConfigName}, SOURCE:
+            ===============================================
+          `);
+          console.log(source);
+          console.log(`
+            ===============================================
+          `);
+          console.log(`
+            OUTPUT:
+            ===============================================
+          `);
+          console.log(code);
+          console.log(`
+            ===============================================
+          `);
+        }
+
+        return code;
       }
 
       describe('Comparison', () => {

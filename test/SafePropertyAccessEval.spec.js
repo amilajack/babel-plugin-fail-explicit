@@ -20,7 +20,7 @@ export const babelConfig = {
   }
 };
 
-describe('SafeCoercionEval', () => {
+describe('SafePropertyAccess', () => {
   for (const config of configs) {
     describe(`Config "${config.testConfigName}"`, () => {
       function transform(code: string): string {

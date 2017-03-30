@@ -37,6 +37,9 @@ export default function ({ types: t }) {
         }
       },
 
+      /**
+       * Used by safePropertyAccess
+       */
       MemberExpression(path, state) {
         if (t.isAssignmentExpression(path.parent)) {
           if (path.parentKey === 'left') {
@@ -113,6 +116,7 @@ export default function ({ types: t }) {
       },
 
       /**
+       * Used by safeCoerce
        * @TODO: Support BinaryExpression|AssignmentExpression|UnaryExpression
        */
       'BinaryExpression|AssignmentExpression': function (path: NodePath) {
