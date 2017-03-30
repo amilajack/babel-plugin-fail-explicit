@@ -27,7 +27,7 @@ npm install --save-dev babel-plugin-fail-explicit
 // .babelrc
 {
   "plugins": [
-    ['fail-explicit, {
+    ['fail-explicit', {
       commonJSImports: true
     }]
   ]
