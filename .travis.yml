@@ -4,8 +4,7 @@ language: node_js
 
 node_js:
   - 7
-  - 6
-  - 5
-  - 4
 
 cache: yarn
+
+script: yarn test && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js

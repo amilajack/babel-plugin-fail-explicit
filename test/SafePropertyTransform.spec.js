@@ -34,14 +34,13 @@ describe('SafePropertyTransform', () => {
         some.foo
       `))
       .toEqual(dedent(`
-        var safePropertyAccess = require("safe-access-check").safePropertyAccess;
-
-        var safeCoerce = require("safe-access-check").safeCoerce;
+        import { safePropertyAccess as _safePropertyAccess } from "safe-access-check";
+        import { safeCoerce as _safeCoerce } from "safe-access-check";
 
         const some = {
         foo: 'doo'
         };
-        safePropertyAccess(["foo"], some);
+        _safePropertyAccess(["foo"], some);
       `));
     });
 
@@ -53,9 +52,8 @@ describe('SafePropertyTransform', () => {
         some.foo = 'some'
       `))
       .toEqual(dedent(`
-        var safePropertyAccess = require("safe-access-check").safePropertyAccess;
-
-        var safeCoerce = require("safe-access-check").safeCoerce;
+        import { safePropertyAccess as _safePropertyAccess } from "safe-access-check";
+        import { safeCoerce as _safeCoerce } from "safe-access-check";
 
         const some = {
         foo: 'doo'
@@ -70,14 +68,13 @@ describe('SafePropertyTransform', () => {
         some.foo = some.doo
       `))
       .toEqual(dedent(`
-        var safePropertyAccess = require("safe-access-check").safePropertyAccess;
-
-        var safeCoerce = require("safe-access-check").safeCoerce;
+        import { safePropertyAccess as _safePropertyAccess } from "safe-access-check";
+        import { safeCoerce as _safeCoerce } from "safe-access-check";
 
         const some = {
         foo: 'doo'
         };
-        some.foo = safePropertyAccess(["doo"], some);
+        some.foo = _safePropertyAccess(["doo"], some);
       `));
 
       expect(transform(`
@@ -87,14 +84,13 @@ describe('SafePropertyTransform', () => {
         some.foo.moo = some.doo
       `))
       .toEqual(dedent(`
-        var safePropertyAccess = require("safe-access-check").safePropertyAccess;
-
-        var safeCoerce = require("safe-access-check").safeCoerce;
+        import { safePropertyAccess as _safePropertyAccess } from "safe-access-check";
+        import { safeCoerce as _safeCoerce } from "safe-access-check";
 
         const some = {
         foo: 'doo'
         };
-        safePropertyAccess(["foo"], some).moo = safePropertyAccess(["doo"], some);
+        _safePropertyAccess(["foo"], some).moo = _safePropertyAccess(["doo"], some);
       `));
     });
 
@@ -104,12 +100,11 @@ describe('SafePropertyTransform', () => {
         some[0]
       `))
       .toEqual(dedent(`
-        var safePropertyAccess = require("safe-access-check").safePropertyAccess;
-
-        var safeCoerce = require("safe-access-check").safeCoerce;
+        import { safePropertyAccess as _safePropertyAccess } from "safe-access-check";
+        import { safeCoerce as _safeCoerce } from "safe-access-check";
 
         const some = [];
-        safePropertyAccess([0], some);
+        _safePropertyAccess([0], some);
       `));
     });
   });

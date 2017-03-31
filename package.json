@@ -9,11 +9,12 @@
   },
   "scripts": {
     "build": "cross-env NODE_ENV=production rm -rf lib && mkdir lib && babel src/index.js --out-file lib/index.js --source-maps",
+    "coverage": "npm run spec -- --coverage && nyc report --temp-directory=coverage --reporter=text-lcov | coveralls",
     "flow": "flow check",
     "flow-typed": "flow-typed install",
     "lint": "eslint --cache --format=node_modules/eslint-formatter-pretty .",
-    "spec": "cross-env NODE_ENV=test jest",
-    "test": "cross-env NODE_ENV=test npm run lint && npm run spec",
+    "spec": "cross-env BABEL_DISABLE_CACHE=1 NODE_ENV=test jest",
+    "test": "cross-env BABEL_DISABLE_CACHE=1 NODE_ENV=test npm run lint && npm run spec",
     "version": "npm run build"
   },
   "jest": {
@@ -36,6 +37,9 @@
     "lib"
   ],
   "homepage": "https://github.com/amilajack/babel-plugin-fail-explicit#readme",
+  "dependencies": {
+    "safe-access-check": "^0.0.12"
+  },
   "devDependencies": {
     "babel-cli": "^6.24.0",
     "babel-core": "^6.24.0",
@@ -43,6 +47,7 @@
     "babel-plugin-add-module-exports": "^0.2.1",
     "babel-plugin-transform-async-to-bluebird": "^1.0.1",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.24.0",
     "babel-plugin-transform-es2015-modules-umd": "^6.24.0",
     "babel-plugin-transform-flow-strip-types": "^6.22.0",
     "babel-plugin-transform-promise-to-bluebird": "^1.1.1",
@@ -50,10 +55,12 @@
     "babel-polyfill": "^6.23.0",
     "babel-preset-env": "^1.2.2",
     "babel-preset-es2015": "^6.24.0",
+    "babel-preset-stage-0": "^6.22.0",
     "babel-register": "^6.24.0",
     "babel-traverse": "^6.23.1",
     "babel-types": "^6.23.0",
     "chai": "^3.5.0",
+    "coveralls": "^2.12.0",
     "cross-env": "^3.2.4",
     "dedent": "^0.7.0",
     "eslint": "^3.18.0",
@@ -70,8 +77,5 @@
   "devEngines": {
     "node": ">=7.x",
     "npm": ">=4.x"
-  },
-  "dependencies": {
-    "safe-access-check": "^0.0.12"
   }
 }

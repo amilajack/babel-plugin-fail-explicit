@@ -8,32 +8,45 @@ import type { NodePath } from 'babel-traverse';
 export default function ({ types: t }) {
   return {
     visitor: {
-      Program(path: NodePath) {
-        // ES6 Imports
-        // state.file.addImport('safe-access-chech', 'safeCoerce');
-        // state.file.addImport('safe-access-chech', 'safePropertyAccess');
-
-        // CommonJS Imports
-        path.unshiftContainer('body', [
-          t.variableDeclaration('var', [
-            t.variableDeclarator(
-              t.identifier('safeCoerce'),
-              t.memberExpression(t.callExpression(t.identifier('require'),
-                [t.stringLiteral('safe-access-check')]), t.identifier('safeCoerce'))
-            )
-          ])
-        ]);
-        path.unshiftContainer('body', [
-          t.variableDeclaration('var', [
-            t.variableDeclarator(
-              t.identifier('safePropertyAccess'),
-              t.memberExpression(t.callExpression(t.identifier('require'),
-                [t.stringLiteral('safe-access-check')]), t.identifier('safePropertyAccess'))
-            )
-          ])
-        ]);
+      Program(path: NodePath, state) {
+        if (state.opts.commonJSImports === true) {
+          // CommonJS Imports
+          // @NOTE: CommonJS imports do not work as expected. Prefer ES6 imports
+          path.unshiftContainer('body', [
+            t.variableDeclaration('var', [
+              t.variableDeclarator(
+                t.identifier('_safeCoerce'),
+                t.memberExpression(t.callExpression(t.identifier('require'),
+                  [t.stringLiteral('safe-access-check')]), t.identifier('safeCoerce'))
+              )
+            ])
+          ]);
+          path.unshiftContainer('body', [
+            t.variableDeclaration('var', [
+              t.variableDeclarator(
+                t.identifier('_safePropertyAccess'),
+                t.memberExpression(t.callExpression(t.identifier('require'),
+                  [t.stringLiteral('safe-access-check')]), t.identifier('safePropertyAccess'))
+              )
+            ])
+          ]);
+        } else {
+          // ES6 Imports
+          state.file.addImport('safe-access-check', 'safeCoerce', '_safeCoerce');
+          state.file.addImport('safe-access-check', 'safePropertyAccess', '_safePropertyAccess');
+        }
       },
 
+      /**
+       * Used by safePropertyAccess
+       *
+       * http://2ality.com/2015/12/babel-commonjs.html
+       *
+       * BUG:
+       * var _safeAccessCheck = require('safe-access-check');
+       * var _safeAccessCheck2 = interopRequireDefault(_safeAccessCheck)
+       * _safeAccessCheck2.safePropertyAccess()
+       */
       MemberExpression(path, state) {
         if (t.isAssignmentExpression(path.parent)) {
           if (path.parentKey === 'left') {
@@ -91,7 +104,7 @@ export default function ({ types: t }) {
         try {
           path.replaceWith(
             t.callExpression(
-              t.identifier('safePropertyAccess'),
+              t.identifier('_safePropertyAccess'),
               [
                 t.arrayExpression(
                   items.reverse()
@@ -110,6 +123,7 @@ export default function ({ types: t }) {
       },
 
       /**
+       * Used by safeCoerce
        * @TODO: Support BinaryExpression|AssignmentExpression|UnaryExpression
        */
       'BinaryExpression|AssignmentExpression': function (path: NodePath) {
@@ -127,7 +141,7 @@ export default function ({ types: t }) {
 
         path.replaceWith(
           t.callExpression(
-            t.identifier('safeCoerce'),
+            t.identifier('_safeCoerce'),
             [
               path.node.left,
               t.stringLiteral(path.node.operator),

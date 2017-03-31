@@ -1,9 +1,26 @@
 import * as babel from 'babel-core';
 import { expect } from 'chai';
+import babelPluginFailExplicit from '../src/index';
 import { configs, defaultConfig } from './SafeCoercionEval.spec';
 
 
-describe('SafePropertyAccessEval', () => {
+/* eslint no-eval: 0, import/prefer-default-export: 0 */
+
+export const babelConfig = {
+  compact: false,
+  sourceType: 'module',
+  plugins: [
+    [babelPluginFailExplicit, {
+      commonJSImports: true
+    }]
+  ],
+  generatorOpts: {
+    quotes: 'double',
+    compact: false
+  }
+};
+
+describe('SafePropertyAccess', () => {
   for (const config of configs) {
     describe(`Config "${config.testConfigName}"`, () => {
       function transform(code: string): string {
@@ -14,7 +31,6 @@ describe('SafePropertyAccessEval', () => {
         )
         .code;
       }
-
       describe('Basic Tests', () => {
         describe('Object Access', () => {
           it('should fail on incorrect property access', () => {
@@ -150,36 +166,6 @@ describe('SafePropertyAccessEval', () => {
               })
               .to.throw(TypeError, 'Property "loo" does not exist in "Function"');
             });
-          });
-
-          it('should fail on undefined property access', () => {
-            expect(() => {
-              eval(transform(`
-                const some = []
-                some[undefined]
-              `));
-            })
-            .to.throw(TypeError, 'Type "undefined" cannot be used to access Array');
-          });
-
-          it('should fail on null property access', () => {
-            expect(() => {
-              eval(transform(`
-                const some = [0]
-                some[null]
-              `));
-            })
-            .to.throw(TypeError, 'Type "null" cannot be used to access Array');
-          });
-
-          it('should fail on object property access', () => {
-            expect(() => {
-              eval(transform(`
-                const some = []
-                some[{}]
-              `));
-            })
-            .to.throw(TypeError, 'Type "Object" cannot be used to access Array');
           });
         });
       });
