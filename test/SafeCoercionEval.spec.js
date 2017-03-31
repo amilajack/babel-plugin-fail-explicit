@@ -58,6 +58,20 @@ export const configs = [
     ]
   },
   {
+    testConfigName: 'stage-0',
+    presets: ['stage-0'],
+    plugins: [
+      [babelPluginFailExplicit, { commonJSImports: true }]
+    ]
+  },
+  {
+    testConfigName: 'es2015,stage-0',
+    presets: ['es2015', 'stage-0'],
+    plugins: [
+      [babelPluginFailExplicit, { commonJSImports: true }]
+    ]
+  },
+  {
     testConfigName: 'transform-es2015-modules-commonjs',
     plugins: [
       [babelPluginFailExplicit, { commonJSImports: true }],

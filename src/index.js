@@ -39,6 +39,13 @@ export default function ({ types: t }) {
 
       /**
        * Used by safePropertyAccess
+       *
+       * http://2ality.com/2015/12/babel-commonjs.html
+       *
+       * BUG:
+       * var _safeAccessCheck = require('safe-access-check');
+       * var _safeAccessCheck2 = interopRequireDefault(_safeAccessCheck)
+       * _safeAccessCheck2.safePropertyAccess()
        */
       MemberExpression(path, state) {
         if (t.isAssignmentExpression(path.parent)) {
