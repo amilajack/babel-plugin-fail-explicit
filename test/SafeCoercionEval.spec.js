@@ -9,7 +9,8 @@ export const defaultConfig = {
   plugins: [
     [babelPluginFailExplicit, {
       commonJSImports: true
-    }]
+    }],
+    'transform-es2015-modules-commonjs'
   ],
   generatorOpts: {
     quotes: 'double',
@@ -23,7 +24,10 @@ export const configs = [
   },
   {
     testConfigName: 'commonjs',
-    plugins: [[babelPluginFailExplicit, { commonJSImports: true }]]
+    plugins: [
+      [babelPluginFailExplicit, { commonJSImports: true }],
+      'transform-es2015-modules-commonjs'
+    ]
   },
   {
     testConfigName: 'es2015 preset',
@@ -33,42 +37,48 @@ export const configs = [
     testConfigName: 'babel preset node 4',
     presets: [['env', { targets: { node: 4 } }]],
     plugins: [
-      [babelPluginFailExplicit, { commonJSImports: true }]
+      [babelPluginFailExplicit, { commonJSImports: true }],
+      'transform-es2015-modules-commonjs'
     ]
   },
   {
     testConfigName: 'babel preset node 5',
     presets: [['env', { targets: { node: 5 } }]],
     plugins: [
-      [babelPluginFailExplicit, { commonJSImports: true }]
+      [babelPluginFailExplicit, { commonJSImports: true }],
+      'transform-es2015-modules-commonjs'
     ]
   },
   {
     testConfigName: 'babel preset node 6',
     presets: [['env', { targets: { node: 6 } }]],
     plugins: [
-      [babelPluginFailExplicit, { commonJSImports: true }]
+      [babelPluginFailExplicit, { commonJSImports: true }],
+      'transform-es2015-modules-commonjs'
     ]
   },
   {
     testConfigName: 'babel preset node 7',
     presets: [['env', { targets: { node: 7 } }]],
     plugins: [
-      [babelPluginFailExplicit, { commonJSImports: true }]
+      [babelPluginFailExplicit, { commonJSImports: true }],
+      'transform-es2015-modules-commonjs'
     ]
   },
   {
     testConfigName: 'stage-0',
     presets: ['stage-0'],
     plugins: [
-      [babelPluginFailExplicit, { commonJSImports: true }]
+      [babelPluginFailExplicit, { commonJSImports: true }],
+      'transform-es2015-modules-commonjs'
     ]
   },
   {
     testConfigName: 'es2015,stage-0',
     presets: ['es2015', 'stage-0'],
     plugins: [
-      [babelPluginFailExplicit, { commonJSImports: true }]
+      [babelPluginFailExplicit, { commonJSImports: true }],
+      'transform-es2015-modules-commonjs'
     ]
   },
   {
@@ -83,6 +93,7 @@ export const configs = [
     presets: ['es2015'],
     plugins: [
       'transform-flow-strip-types',
+      'transform-es2015-modules-commonjs',
       [babelPluginFailExplicit, { commonJSImports: true }]
     ]
   },
@@ -94,17 +105,19 @@ export const configs = [
       'transform-es2015-modules-commonjs'
     ]
   },
-  {
-    testConfigName: 'transform-es2015-modules-umd',
-    plugins: [
-      [babelPluginFailExplicit, { commonJSImports: true }],
-      'transform-es2015-modules-umd'
-    ]
-  },
+  // @TODO
+  // {
+  //   testConfigName: 'transform-es2015-modules-umd',
+  //   plugins: [
+  //     [babelPluginFailExplicit, { commonJSImports: true }],
+  //     'transform-es2015-modules-umd'
+  //   ]
+  // },
   {
     testConfigName: 'transform-async-to-bluebird',
     plugins: [
       [babelPluginFailExplicit, { commonJSImports: true }],
+      'transform-es2015-modules-commonjs',
       'transform-async-to-bluebird'
     ]
   }
@@ -192,7 +205,7 @@ describe('SafeCoercionEval', () => {
               `
             ));
           })
-          .to.throw(TypeError, 'Unexpected coercion of type "Object" and type "Array" using ">=" operator');
+          .to.throw(TypeError, 'Unexpected comparison of type "Object" and type "Array" using ">=" operator');
         });
       });
 
