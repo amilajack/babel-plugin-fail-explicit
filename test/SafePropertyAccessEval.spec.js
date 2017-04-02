@@ -87,7 +87,7 @@ describe('SafePropertyAccessEval', () => {
             .to.throw(TypeError, '"Array[0][0][2]" is out of bounds');
           });
 
-          it.only('should fail on out of bounds on new Array()', () => {
+          it('should fail on out of bounds on new Array()', () => {
             expect(() => {
               eval(transform(`
                 const some = new Array(3)

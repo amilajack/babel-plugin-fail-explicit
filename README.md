@@ -13,6 +13,7 @@ babel-plugin-fail-explicit
 ## Roadmap
 - [x] Fail on unsafe coercion
 - [x] Fail on unsafe property access
+- [ ] Do not fail inside conditional expressions or default statements (`||`), on by default
 - [ ] Allow unsafe access in if statement by default
 - [ ] Allow for configuration of strictness
 
