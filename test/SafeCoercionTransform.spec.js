@@ -24,7 +24,7 @@ export function transform(code: string): string {
   ).code);
 }
 
-describe('SafeCoercion', () => {
+describe.skip('SafeCoercionTransform', () => {
   describe('Comparison', () => {
     it('should fail on comparison of unexpected types', () => {
       expect(transform(

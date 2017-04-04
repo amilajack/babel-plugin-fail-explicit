@@ -20,7 +20,7 @@ export const babelConfig = {
   }
 };
 
-describe('SafePropertyAccess', () => {
+describe('SafePropertyAccessEval', () => {
   for (const config of configs) {
     describe(`Config "${config.testConfigName}"`, () => {
       function transform(code: string): string {
@@ -87,6 +87,16 @@ describe('SafePropertyAccess', () => {
             .to.throw(TypeError, '"Array[0][0][2]" is out of bounds');
           });
 
+          it('should fail on out of bounds on new Array()', () => {
+            expect(() => {
+              eval(transform(`
+                const some = new Array(3)
+                some[10]
+              `));
+            })
+            .to.throw(TypeError, '"Array[10]" is out of bounds');
+          });
+
           it('should pass on valid multiple dimentional array access', () => {
             expect(eval(transform(`
               (() => {
@@ -128,7 +138,7 @@ describe('SafePropertyAccess', () => {
                 some[NaN]
               `));
             })
-            .to.throw(TypeError, 'Property "NaN" does not exist in "Array[NaN]"');
+            .to.throw(TypeError, 'Type "NaN" cannot be used to access "Array"');
           });
 
           describe('Class', () => {

@@ -8,35 +8,11 @@ import type { NodePath } from 'babel-traverse';
 export default function ({ types: t }) {
   return {
     visitor: {
-      Program(path: NodePath, state) {
-        if (state.opts.commonJSImports === true) {
-          // CommonJS Imports
-          // @NOTE: CommonJS imports do not work as expected. Prefer ES6 imports
-          path.unshiftContainer('body', [
-            t.variableDeclaration('var', [
-              t.variableDeclarator(
-                t.identifier('_safeCoerce'),
-                t.memberExpression(t.callExpression(t.identifier('require'),
-                  [t.stringLiteral('safe-access-check')]), t.identifier('safeCoerce'))
-              )
-            ])
-          ]);
-          path.unshiftContainer('body', [
-            t.variableDeclaration('var', [
-              t.variableDeclarator(
-                t.identifier('_safePropertyAccess'),
-                t.memberExpression(t.callExpression(t.identifier('require'),
-                  [t.stringLiteral('safe-access-check')]), t.identifier('safePropertyAccess'))
-              )
-            ])
-          ]);
-        } else {
-          // ES6 Imports
-          state.file.addImport('safe-access-check', 'safeCoerce', '_safeCoerce');
-          state.file.addImport('safe-access-check', 'safePropertyAccess', '_safePropertyAccess');
+      Program: {
+        exit(path: NodePath, state) {
+          state.file.addImport('safe-access-check', 'default');
         }
       },
-
       /**
        * Used by safePropertyAccess
        *
@@ -46,6 +22,9 @@ export default function ({ types: t }) {
        * var _safeAccessCheck = require('safe-access-check');
        * var _safeAccessCheck2 = interopRequireDefault(_safeAccessCheck)
        * _safeAccessCheck2.safePropertyAccess()
+       *
+       * @TODO: Enforce that call to safeCoerce() and safePropertyAccess()
+       *        ALWAYS come after the import
        */
       MemberExpression(path, state) {
         if (t.isAssignmentExpression(path.parent)) {
@@ -66,6 +45,10 @@ export default function ({ types: t }) {
 
         while (t.isMemberExpression(object)) {
           if (object.computed === false) {
+            // @HACK: Hardcode edge case
+            if (object.property.name === '__esModule') {
+              return;
+            }
             items.push(t.stringLiteral(object.property.name));
           } else {
             items.push(object.property);
@@ -104,7 +87,7 @@ export default function ({ types: t }) {
         try {
           path.replaceWith(
             t.callExpression(
-              t.identifier('_safePropertyAccess'),
+              t.memberExpression(t.identifier('global'), t.identifier('safePropertyAccess')),
               [
                 t.arrayExpression(
                   items.reverse()
@@ -141,7 +124,7 @@ export default function ({ types: t }) {
 
         path.replaceWith(
           t.callExpression(
-            t.identifier('_safeCoerce'),
+            t.memberExpression(t.identifier('global'), t.identifier('safeCoerce')),
             [
               path.node.left,
               t.stringLiteral(path.node.operator),

@@ -24,7 +24,7 @@ export function transform(code: string): string {
   ).code);
 }
 
-describe('SafePropertyTransform', () => {
+describe.skip('SafePropertyTransform', () => {
   describe('Basic', () => {
     it('should perform basic object access transform', () => {
       expect(transform(`
