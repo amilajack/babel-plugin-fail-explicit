@@ -1,5 +1,5 @@
 import * as babel from 'babel-core';
-import { expect } from 'chai';
+import { expect as chaiExpect } from 'chai';
 import babelPluginFailExplicit from '../src/index';
 import { configs, defaultConfig } from './SafeCoercionEval.spec';
 
@@ -34,7 +34,7 @@ describe('SafePropertyAccessEval', () => {
       describe('Basic Tests', () => {
         describe('Object Access', () => {
           it('should fail on incorrect property access', () => {
-            expect(() => {
+            chaiExpect(() => {
               eval(transform(`
                 const some = {}
                 some.soo
@@ -68,7 +68,7 @@ describe('SafePropertyAccessEval', () => {
           });
 
           it('should fail on out out of bounds property access', () => {
-            expect(() => {
+            chaiExpect(() => {
               eval(transform(`
                 const some = []
                 some[2]
@@ -78,7 +78,7 @@ describe('SafePropertyAccessEval', () => {
           });
 
           it('should fail on multiple dimentional array access', () => {
-            expect(() => {
+            chaiExpect(() => {
               eval(transform(`
                 const some = [[[]]]
                 some[0][0][2]
@@ -88,7 +88,7 @@ describe('SafePropertyAccessEval', () => {
           });
 
           it('should fail on out of bounds on new Array()', () => {
-            expect(() => {
+            chaiExpect(() => {
               eval(transform(`
                 const some = new Array(3)
                 some[10]
@@ -98,7 +98,7 @@ describe('SafePropertyAccessEval', () => {
           });
 
           it('should pass on valid multiple dimentional array access', () => {
-            expect(eval(transform(`
+            chaiExpect(eval(transform(`
               (() => {
                 const some = [[[['moo']]]]
                 return some[0][0][0][0]
@@ -110,7 +110,7 @@ describe('SafePropertyAccessEval', () => {
 
         describe('Mixed Access', () => {
           it('should fail on incorrect property access', () => {
-            expect(() => {
+            chaiExpect(() => {
               eval(transform(`
                 const some = {}
                 some.soo
@@ -120,7 +120,7 @@ describe('SafePropertyAccessEval', () => {
           });
 
           it('should pass on valid property access', () => {
-            expect(eval(transform(`
+            chaiExpect(eval(transform(`
               (function() {
                 const some = {some:[{doo:['moo']}]}
                 return some.some[0].doo[0]
@@ -132,7 +132,7 @@ describe('SafePropertyAccessEval', () => {
 
         describe('Invalid Access', () => {
           it('should fail on NaN property access', () => {
-            expect(() => {
+            chaiExpect(() => {
               eval(transform(`
                 const some = [0]
                 some[NaN]
@@ -143,7 +143,7 @@ describe('SafePropertyAccessEval', () => {
 
           describe('Class', () => {
             it('should fail on incorrect class instance property access', () => {
-              expect(() => {
+              chaiExpect(() => {
                 eval(transform(`
                   class Foo {
                     soo() {}
@@ -153,7 +153,7 @@ describe('SafePropertyAccessEval', () => {
                 `));
               })
               .to.throw(TypeError, 'Property "loo" does not exist in "Object"');
-              expect(() => {
+              chaiExpect(() => {
                 eval(transform(`
                   class Foo {
                     soo() {}
@@ -165,7 +165,7 @@ describe('SafePropertyAccessEval', () => {
             });
 
             it('should fail on incorrect class static property access', () => {
-              expect(() => {
+              chaiExpect(() => {
                 eval(transform(`
                   class Foo {
                     static soo() {}
@@ -177,6 +177,77 @@ describe('SafePropertyAccessEval', () => {
               .to.throw(TypeError, 'Property "loo" does not exist in "Function"');
             });
           });
+        });
+      });
+
+      describe('Default Value Propagation', () => {
+        it('should propagate default values with "||"', () => {
+          chaiExpect(eval(transform(`
+            (() => {
+              const some = {}
+              return some.foo || 'bar'
+            })()
+          `)))
+          .to.equal('bar');
+        });
+
+        it('should propagate default values with "&&"', () => {
+          chaiExpect(eval(transform(`
+            (() => {
+              const some = {}
+              return some.foo && 'bar'
+            })()
+          `)))
+          .to.equal(undefined);
+        });
+
+        it('should propagate in conditional test', () => {
+          chaiExpect(eval(transform(`
+            (() => {
+              const some = {}
+              if (some.foo || some.bar || some.baz) {}
+              return true
+            })()
+          `)))
+          .to.equal(true);
+
+          chaiExpect(eval(transform(`
+            (() => {
+              const some = {}
+              if (some.foo && some.bar && some.baz) {}
+              return true
+            })()
+          `)))
+          .to.equal(true);
+        });
+      });
+
+      describe('Conditional Expressions', () => {
+        it('should evaluate conditional expressions', () => {
+          chaiExpect(() => {
+            eval(transform(`
+              (() => {
+                const some = {}
+                return some.foo ? true : false
+              })()
+            `));
+          })
+          .to.throw(TypeError, 'Property "foo" does not exist in "Object"');
+        });
+
+        it('should fail on unsafe conditional access', () => {
+          chaiExpect(() => {
+            eval(transform(`
+              (() => {
+                const some = {}
+                if (some.some === true) {
+                  return false
+                }
+                return true
+              })()
+            `));
+          })
+          .to.throw(TypeError, 'Property "some" does not exist in "Object"');
         });
       });
     });

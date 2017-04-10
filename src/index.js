@@ -27,14 +27,26 @@ export default function ({ types: t }) {
        *        ALWAYS come after the import
        */
       MemberExpression(path, state) {
+        // Exit if safeCoerceCheck is disabled
+        if (state.opts.safePropertyAccess === false) {
+          return;
+        }
+
         if (t.isAssignmentExpression(path.parent)) {
           if (path.parentKey === 'left') {
             return;
           }
         }
 
-        // @HACK: Temporarily prevent wrapping callExpression's
-        //        Reason of bug is unknown
+        // Abort if immediate parent is logical expression (`||` or `&&`)
+        if (state.opts.enforceLogicExpressionCheck !== false) {
+          if (t.isLogicalExpression(path.parent)) {
+            return;
+          }
+        }
+
+        // @TODO @HACK: Temporarily prevent wrapping callExpression's
+        //              Reason of bug is unknown
         if (t.isCallExpression(path.parent)) {
           return;
         }
@@ -109,7 +121,12 @@ export default function ({ types: t }) {
        * Used by safeCoerce
        * @TODO: Support BinaryExpression|AssignmentExpression|UnaryExpression
        */
-      'BinaryExpression|AssignmentExpression': function (path: NodePath) {
+      'BinaryExpression|AssignmentExpression': function (path: NodePath, state) {
+        // Exit if safeCoerce is disabled
+        if (state.opts.safeCoerce === false) {
+          return;
+        }
+
         if (
           path.node.operator === '===' ||
           path.node.operator === '==' ||
