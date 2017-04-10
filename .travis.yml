@@ -7,4 +7,5 @@ node_js:
 
 cache: yarn
 
-script: yarn test && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
+# @TODO: Fix coverals setup
+# script: yarn test && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
