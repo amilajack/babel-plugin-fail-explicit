@@ -159,6 +159,44 @@ describe('SafeCoercionEval', () => {
         return code;
       }
 
+      describe('Multiple Operators', () => {
+        it('should work with multiplication operator', () => {
+          chaiExpect(() => {
+            eval(transform(`
+              'some' * 12;
+            `));
+          })
+          .to.throw(TypeError, 'Unexpected coercion of type "string" and type "number" using "*" operator');
+        });
+
+        it('should work with division operator', () => {
+          chaiExpect(() => {
+            eval(transform(`
+              'some' / 12;
+            `));
+          })
+          .to.throw(TypeError, 'Unexpected coercion of type "string" and type "number" using "/" operator');
+        });
+
+        it('should work with exponent operator', () => {
+          chaiExpect(() => {
+            eval(transform(`
+              'some' ** 12;
+            `));
+          })
+          .to.throw(TypeError, 'Unexpected coercion of type "string" and type "number" using "**" operator');
+        });
+
+        it('should work with subtraction operator', () => {
+          chaiExpect(() => {
+            eval(transform(`
+              'some' - 12;
+            `));
+          })
+          .to.throw(TypeError, 'Unexpected coercion of type "string" and type "number" using "-" operator');
+        });
+      });
+
       describe('Comparison', () => {
         it('should allow for greater than comparison', () => {
           expect(eval(transform(
