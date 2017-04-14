@@ -13,7 +13,7 @@ babel-plugin-fail-explicit
 ## Roadmap
 - [x] Fail on unsafe coercion
 - [x] Fail on unsafe property access
-- [ ] Do not fail inside conditional expressions or default statements (`||`), on by default
+- [x] Do not fail inside conditional expressions or default statements (`||`), on by default
 - [ ] Allow unsafe access in if statement by default
 - [ ] Allow for configuration of strictness
 
@@ -22,7 +22,6 @@ babel-plugin-fail-explicit
 ## Installation
 ```bash
 npm install --save-dev babel-plugin-fail-explicit
-npm install --save-dev babel-plugin-transform-es2015-modules-commonjs
 ```
 
 ## Setup
@@ -30,7 +29,6 @@ npm install --save-dev babel-plugin-transform-es2015-modules-commonjs
 // .babelrc
 {
   "plugins": [
-    "transform-es2015-modules-commonjs",
     "fail-explicit"
   ]
 }
