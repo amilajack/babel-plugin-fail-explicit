@@ -17,7 +17,7 @@ babel-plugin-fail-explicit
 - [ ] Allow unsafe access in if statement by default
 - [ ] Allow for configuration of strictness
 
-**⚠️ This doesn't work as expected with `"transform-es2015-modules-umd"` at the moment ⚠️**
+**⚠️ This doesn't work as expected with `"transform-es2015-modules-umd"` and **hot-reloading** at the moment ⚠️**
 
 ## Installation
 ```bash
@@ -84,6 +84,10 @@ obj.foo.bar._MOO_.baz;
 const some = new Array(3)
 some[10]
 // TypeError: '"Array[10]" is out of bounds'
+
+const bar = []
+some[100]
+// TypeError: '"Array[100]" is out of bounds'
 
 // TypeError: '"woo[1]" is out of bounds'
 const obj = {
