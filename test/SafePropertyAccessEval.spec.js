@@ -141,6 +141,44 @@ describe('SafePropertyAccessEval', () => {
             .to.throw(TypeError, 'Type "NaN" cannot be used to access "Array"');
           });
 
+          describe('Square Bracket Notation', () => {
+            it('should access square bracket notation properties', () => {
+              chaiExpect(() => {
+                eval(transform(`
+                  const some = {}
+                  some['foo']
+                `));
+              })
+              .to.throw(TypeError, 'Property "foo" does not exist in "Object"');
+            });
+
+            it('should access mixed properties', () => {
+              chaiExpect(eval(transform(`
+                (function() {
+                  const some = {
+                    foo: {
+                      bar: 'baz'
+                    }
+                  }
+                  return some['foo'].bar
+                })()
+              `)))
+              .to.equal('baz');
+
+              chaiExpect(eval(transform(`
+                (function() {
+                  const some = {
+                    foo: {
+                      bar: [0, 1, 2]
+                    }
+                  }
+                  return some['foo'].bar[0]
+                })()
+              `)))
+              .to.equal(0);
+            });
+          });
+
           describe('Class', () => {
             it('should fail on incorrect class instance property access', () => {
               chaiExpect(() => {
