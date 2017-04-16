@@ -34,6 +34,9 @@ npm install --save-dev babel-plugin-fail-explicit
 }
 ```
 
+### Demo:
+To experiment with `babel-plugin-fail-explicit`, see [this demo repo](https://github.com/amilajack/babel-plugin-fail-explicit-demo)
+
 ### Examples
 ```js
 // ------------------------------------------------
