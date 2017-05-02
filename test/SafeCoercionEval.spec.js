@@ -1,3 +1,4 @@
+// @flow
 import * as babel from 'babel-core';
 import { expect as chaiExpect } from 'chai';
 import babelPluginFailExplicit from '../src/index';
