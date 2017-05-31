@@ -2,15 +2,15 @@
 import type { NodePath } from 'babel-traverse';
 
 
-/* eslint no-restricted-syntax: 0, fp/no-loops: 0, no-continue: 0, func-names: 0, fp/no-let: 0 */
+/* eslint fp/no-loops: 0, no-continue: 0, func-names: 0, fp/no-let: 0 */
 
 // https://astexplorer.net/#/gist/a6acab67ec110ce0ebcfbbee7521de2a/779ae92132ef8c26e0b8f37e96ec83ab176d33f3
 
-export default function ({ types: t }) {
+export default function ({ types: t }: Object) {
   return {
     visitor: {
       Program: {
-        exit(path: NodePath, state) {
+        exit(path: NodePath, state: Object) {
           state.file.addImport('safe-access-check', 'default');
         }
       },
@@ -27,7 +27,7 @@ export default function ({ types: t }) {
        * @TODO: Enforce that call to safeCoerce() and safePropertyAccess()
        *        ALWAYS come after the import
        */
-      MemberExpression(path, state) {
+      MemberExpression(path: Object, state: Object) {
         // Exit if safeCoerceCheck is disabled
         if (state.opts.safePropertyAccess === false) {
           return;
@@ -71,8 +71,10 @@ export default function ({ types: t }) {
         }
 
         if (t.isCallExpression(id)) {
-          if (id.callee.name === 'require') {
-            return;
+          if (id && id.callee) {
+            if (id.callee.name === 'require') {
+              return;
+            }
           }
         }
 
@@ -122,7 +124,7 @@ export default function ({ types: t }) {
        * Used by safeCoerce
        * @TODO: Support BinaryExpression|AssignmentExpression|UnaryExpression
        */
-      'BinaryExpression|AssignmentExpression': function (path: NodePath, state) {
+      'BinaryExpression|AssignmentExpression': function (path: NodePath, state: Object) {
         // Exit if safeCoerce is disabled
         if (state.opts.safeCoerce === false) {
           return;
