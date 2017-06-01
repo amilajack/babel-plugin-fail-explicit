@@ -8,6 +8,8 @@ babel-plugin-fail-explicit
 
 **A babel plugin that prevents coercion and silent failure in JavaScript**
 
+![demo](https://raw.githubusercontent.com/amilajack/babel-plugin-fail-explicit-demo/7ed9a29ec61d505f2b3ce6be18145c74eb3bc5f5/demo.gif)
+
 **⚠️ Experimental ⚠️**
 
 ## Roadmap
