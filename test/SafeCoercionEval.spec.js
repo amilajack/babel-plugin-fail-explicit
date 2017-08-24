@@ -160,7 +160,7 @@ describe('SafeCoercionEval', () => {
         return code;
       }
 
-      describe('Multiple Operators', () => {
+      describe('Binary Operators', () => {
         it('should work with multiplication operator', () => {
           chaiExpect(() => {
             eval(transform(`
@@ -168,6 +168,41 @@ describe('SafeCoercionEval', () => {
             `));
           })
           .to.throw(TypeError, 'Unexpected coercion of type "string" and type "number" using "*" operator');
+        });
+
+        it('should fail on coercion of "Object" and "Array"', () => {
+          console.log(
+            transform(`
+              {} + {};
+            `)
+          );
+          chaiExpect(() => {
+            eval(transform(`
+              {} + {};
+            `));
+          })
+          .to.throw(TypeError, 'Unexpected coercion of type "Object" and type "Object" using "+" operator');
+
+          chaiExpect(() => {
+            eval(transform(`
+              {} + [];
+            `));
+          })
+          .to.throw(TypeError, 'Unexpected coercion of type "Object" and type "Array" using "+" operator');
+
+          chaiExpect(() => {
+            eval(transform(`
+              {} + null;
+            `));
+          })
+          .to.throw(TypeError, 'Unexpected coercion of type "Object" and type "null" using "+" operator');
+
+          chaiExpect(() => {
+            eval(transform(`
+              {} + undefined;
+            `));
+          })
+          .to.throw(TypeError, 'Unexpected coercion of type "Object" and type "undefined" using "+" operator');
         });
 
         it('should work with division operator', () => {
