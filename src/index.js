@@ -66,7 +66,7 @@ export default function ({ types: t }: Object) {
           } else {
             items.push(object.property);
           }
-          object = object.object;
+          object = object.object; // eslint-disable-line
           id = object;
         }
 
@@ -100,17 +100,13 @@ export default function ({ types: t }: Object) {
         }
 
         try {
-          path.replaceWith(
-            t.callExpression(
-              t.memberExpression(t.identifier('global'), t.identifier('safePropertyAccess')),
-              [
-                t.arrayExpression(
-                  items.reverse()
-                ),
-                t.identifier(id.name || id.callee.name)
-              ]
-            )
-          );
+          path.replaceWith(t.callExpression(
+            t.memberExpression(t.identifier('global'), t.identifier('safePropertyAccess')),
+            [
+              t.arrayExpression(items.reverse()),
+              t.identifier(id.name || id.callee.name)
+            ]
+          ));
         } catch (error) {
           throw new Error([
             'This is an issue with "babel-plugin-fail-explicit"',
@@ -142,16 +138,14 @@ export default function ({ types: t }: Object) {
           return;
         }
 
-        path.replaceWith(
-          t.callExpression(
-            t.memberExpression(t.identifier('global'), t.identifier('safeCoerce')),
-            [
-              path.node.left,
-              t.stringLiteral(path.node.operator),
-              path.node.right
-            ]
-          )
-        );
+        path.replaceWith(t.callExpression(
+          t.memberExpression(t.identifier('global'), t.identifier('safeCoerce')),
+          [
+            path.node.left,
+            t.stringLiteral(path.node.operator),
+            path.node.right
+          ]
+        ));
       }
     }
   };

@@ -30,7 +30,7 @@ describe('SafePropertyAccessEval', () => {
           code,
           Object.assign({}, defaultConfig, config)
         )
-        .code;
+          .code;
       }
       describe('Basic Tests', () => {
         describe('Object Access', () => {
@@ -41,7 +41,7 @@ describe('SafePropertyAccessEval', () => {
                 some.soo
               `));
             })
-            .to.throw(TypeError, 'Property "soo" does not exist in "Object"');
+              .to.throw(TypeError, 'Property "soo" does not exist in "Object"');
           });
         });
 
@@ -75,7 +75,7 @@ describe('SafePropertyAccessEval', () => {
                 some[2]
               `));
             })
-            .to.throw(TypeError, '"Array[2]" is out of bounds');
+              .to.throw(TypeError, '"Array[2]" is out of bounds');
           });
 
           it('should fail on multiple dimentional array access', () => {
@@ -85,7 +85,7 @@ describe('SafePropertyAccessEval', () => {
                 some[0][0][2]
               `));
             })
-            .to.throw(TypeError, '"Array[0][0][2]" is out of bounds');
+              .to.throw(TypeError, '"Array[0][0][2]" is out of bounds');
           });
 
           it('should fail on out of bounds on new Array()', () => {
@@ -95,7 +95,7 @@ describe('SafePropertyAccessEval', () => {
                 some[10]
               `));
             })
-            .to.throw(TypeError, '"Array[10]" is out of bounds');
+              .to.throw(TypeError, '"Array[10]" is out of bounds');
           });
 
           it('should pass on valid multiple dimentional array access', () => {
@@ -105,7 +105,7 @@ describe('SafePropertyAccessEval', () => {
                 return some[0][0][0][0]
               })()
             `)))
-            .to.equal('moo');
+              .to.equal('moo');
           });
         });
 
@@ -117,7 +117,7 @@ describe('SafePropertyAccessEval', () => {
                 some.soo
               `));
             })
-            .to.throw(TypeError, 'Property "soo" does not exist in "Object"');
+              .to.throw(TypeError, 'Property "soo" does not exist in "Object"');
           });
 
           it('should pass on valid property access', () => {
@@ -127,7 +127,7 @@ describe('SafePropertyAccessEval', () => {
                 return some.some[0].doo[0]
               })()
             `)))
-            .to.equal('moo');
+              .to.equal('moo');
           });
         });
 
@@ -139,7 +139,7 @@ describe('SafePropertyAccessEval', () => {
                 some[NaN]
               `));
             })
-            .to.throw(TypeError, 'Type "NaN" cannot be used to access "Array"');
+              .to.throw(TypeError, 'Type "NaN" cannot be used to access "Array"');
           });
 
           describe('Square Bracket Notation', () => {
@@ -150,7 +150,7 @@ describe('SafePropertyAccessEval', () => {
                   some['foo']
                 `));
               })
-              .to.throw(TypeError, 'Property "foo" does not exist in "Object"');
+                .to.throw(TypeError, 'Property "foo" does not exist in "Object"');
             });
 
             it('should access mixed properties', () => {
@@ -164,7 +164,7 @@ describe('SafePropertyAccessEval', () => {
                   return some['foo'].bar
                 })()
               `)))
-              .to.equal('baz');
+                .to.equal('baz');
 
               chaiExpect(eval(transform(`
                 (function() {
@@ -176,7 +176,7 @@ describe('SafePropertyAccessEval', () => {
                   return some['foo'].bar[0]
                 })()
               `)))
-              .to.equal(0);
+                .to.equal(0);
             });
           });
 
@@ -191,7 +191,7 @@ describe('SafePropertyAccessEval', () => {
                   some.loo
                 `));
               })
-              .to.throw(TypeError, 'Property "loo" does not exist in "Object"');
+                .to.throw(TypeError, 'Property "loo" does not exist in "Object"');
               chaiExpect(() => {
                 eval(transform(`
                   class Foo {
@@ -200,7 +200,7 @@ describe('SafePropertyAccessEval', () => {
                   Foo.loo
                 `));
               })
-              .to.throw(TypeError, 'Property "loo" does not exist in "Function"');
+                .to.throw(TypeError, 'Property "loo" does not exist in "Function"');
             });
 
             it('should fail on incorrect class static property access', () => {
@@ -213,7 +213,7 @@ describe('SafePropertyAccessEval', () => {
                   Foo.loo
                 `));
               })
-              .to.throw(TypeError, 'Property "loo" does not exist in "Function"');
+                .to.throw(TypeError, 'Property "loo" does not exist in "Function"');
             });
           });
         });
@@ -227,7 +227,7 @@ describe('SafePropertyAccessEval', () => {
               return some.foo || 'bar'
             })()
           `)))
-          .to.equal('bar');
+            .to.equal('bar');
         });
 
         it('should propagate default values with "&&"', () => {
@@ -237,7 +237,7 @@ describe('SafePropertyAccessEval', () => {
               return some.foo && 'bar'
             })()
           `)))
-          .to.equal(undefined);
+            .to.equal(undefined);
         });
 
         it('should propagate in conditional test', () => {
@@ -248,7 +248,7 @@ describe('SafePropertyAccessEval', () => {
               return true
             })()
           `)))
-          .to.equal(true);
+            .to.equal(true);
 
           chaiExpect(eval(transform(`
             (() => {
@@ -257,7 +257,7 @@ describe('SafePropertyAccessEval', () => {
               return true
             })()
           `)))
-          .to.equal(true);
+            .to.equal(true);
         });
       });
 
@@ -271,7 +271,7 @@ describe('SafePropertyAccessEval', () => {
               })()
             `));
           })
-          .to.throw(TypeError, 'Property "foo" does not exist in "Object"');
+            .to.throw(TypeError, 'Property "foo" does not exist in "Object"');
         });
 
         it('should fail on unsafe conditional access', () => {
@@ -286,7 +286,7 @@ describe('SafePropertyAccessEval', () => {
               })()
             `));
           })
-          .to.throw(TypeError, 'Property "some" does not exist in "Object"');
+            .to.throw(TypeError, 'Property "some" does not exist in "Object"');
         });
       });
     });
