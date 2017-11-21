@@ -167,7 +167,7 @@ describe('SafeCoercionEval', () => {
               'some' * 12;
             `));
           })
-          .to.throw(TypeError, 'Unexpected coercion of type "string" and type "number" using "*" operator');
+            .to.throw(TypeError, 'Unexpected coercion of type "string" and type "number" using "*" operator');
         });
 
         it('should work with division operator', () => {
@@ -176,7 +176,7 @@ describe('SafeCoercionEval', () => {
               'some' / 12;
             `));
           })
-          .to.throw(TypeError, 'Unexpected coercion of type "string" and type "number" using "/" operator');
+            .to.throw(TypeError, 'Unexpected coercion of type "string" and type "number" using "/" operator');
         });
 
         it('should work with exponent operator', () => {
@@ -185,7 +185,7 @@ describe('SafeCoercionEval', () => {
               'some' ** 12;
             `));
           })
-          .to.throw(TypeError, 'Unexpected coercion of type "string" and type "number" using "**" operator');
+            .to.throw(TypeError, 'Unexpected coercion of type "string" and type "number" using "**" operator');
         });
 
         it('should work with subtraction operator', () => {
@@ -194,57 +194,49 @@ describe('SafeCoercionEval', () => {
               'some' - 12;
             `));
           })
-          .to.throw(TypeError, 'Unexpected coercion of type "string" and type "number" using "-" operator');
+            .to.throw(TypeError, 'Unexpected coercion of type "string" and type "number" using "-" operator');
         });
       });
 
       describe('Comparison', () => {
         it('should allow for greater than comparison', () => {
-          expect(eval(transform(
-            `
+          expect(eval(transform(`
             (() => {
               return 'b' > 'aaa'
             })()
-            `
-          )))
-          .toEqual(true);
+            `)))
+            .toEqual(true);
 
-          expect(eval(transform(
-            `
+          expect(eval(transform(`
             (() => {
               const foo = 1
               const bar = 1
               return foo <= bar
             })()
-            `
-          )))
-          .toEqual(true);
+            `)))
+            .toEqual(true);
 
-          expect(eval(transform(
-            `
+          expect(eval(transform(`
             (() => {
               const foo = 2
               const bar = 1
               return foo >= bar
             })()
-            `
-          )))
-          .toEqual(true);
+            `)))
+            .toEqual(true);
         });
 
         it('should fail on comparison of unexpected types', () => {
           chaiExpect(() => {
-            eval(transform(
-              `
+            eval(transform(`
               (() => {
                 const foo = {}
                 const bar = []
                 return foo >= bar
               })()
-              `
-            ));
+              `));
           })
-          .to.throw(TypeError, 'Unexpected comparison of type "Object" and type "Array" using ">=" operator');
+            .to.throw(TypeError, 'Unexpected comparison of type "Object" and type "Array" using ">=" operator');
         });
       });
 
@@ -254,21 +246,19 @@ describe('SafeCoercionEval', () => {
           var obj = 12;
           array + obj;
         `)))
-        .toEqual('some12');
+          .toEqual('some12');
       });
 
       it('should not fail on template literal coercion', () => {
         /* eslint no-template-curly-in-string: 0 */
-        expect(eval(transform(
-          [
-            '(() => {',
-            'const some = { doo: "foo" };',
-            'return `${some.doo}foo`;',
-            '})()'
-          ]
-          .join('')
-        )))
-        .toEqual('foofoo');
+        expect(eval(transform([
+          '(() => {',
+          'const some = { doo: "foo" };',
+          'return `${some.doo}foo`;',
+          '})()'
+        ]
+          .join(''))))
+          .toEqual('foofoo');
       });
 
       it('should fail on coercion with += operator', () => {
@@ -278,7 +268,7 @@ describe('SafeCoercionEval', () => {
             some += 'moo';
           `));
         })
-        .to.throw(TypeError, 'Unexpected coercion of type "Object" and type "string" using "+=" operator');
+          .to.throw(TypeError, 'Unexpected coercion of type "Object" and type "string" using "+=" operator');
       });
 
       it('should fail on coercion in constructor', () => {
@@ -287,7 +277,7 @@ describe('SafeCoercionEval', () => {
             new String('some' + {})
           `));
         })
-        .to.throw(TypeError, 'Unexpected coercion of type "string" and type "Object" using "+" operator');
+          .to.throw(TypeError, 'Unexpected coercion of type "string" and type "Object" using "+" operator');
       });
 
       it('should pass on coercion of new String() concatenation', () => {
@@ -302,7 +292,7 @@ describe('SafeCoercionEval', () => {
             (new Array()) + (new Array())
           `));
         })
-        .to.throw(TypeError, 'Unexpected coercion of type "Array" and type "Array" using "+" operator');
+          .to.throw(TypeError, 'Unexpected coercion of type "Array" and type "Array" using "+" operator');
       });
 
       it('should fail with null', () => {
@@ -311,7 +301,7 @@ describe('SafeCoercionEval', () => {
             (null) + (null)
           `));
         })
-        .to.throw(TypeError, 'Unexpected coercion of type "null" and type "null" using "+" operator');
+          .to.throw(TypeError, 'Unexpected coercion of type "null" and type "null" using "+" operator');
       });
 
       it('should fail with NaN', () => {
@@ -320,7 +310,7 @@ describe('SafeCoercionEval', () => {
             (NaN) + (NaN)
           `));
         })
-        .to.throw(TypeError, 'Unexpected coercion of type "NaN" and type "NaN" using "+" operator');
+          .to.throw(TypeError, 'Unexpected coercion of type "NaN" and type "NaN" using "+" operator');
       });
 
       it('should fail with undefined', () => {
@@ -329,7 +319,7 @@ describe('SafeCoercionEval', () => {
             (undefined) + (undefined)
           `));
         })
-        .to.throw(TypeError, 'Unexpected coercion of type "undefined" and type "undefined" using "+" operator');
+          .to.throw(TypeError, 'Unexpected coercion of type "undefined" and type "undefined" using "+" operator');
       });
 
       it('should not fail on safe coercion in function declaration', () => {
@@ -341,7 +331,7 @@ describe('SafeCoercionEval', () => {
           }
           some()
         `)))
-        .toEqual('some12');
+          .toEqual('some12');
       });
 
       it('should throw error on unsafe coercion', () => {
@@ -352,7 +342,7 @@ describe('SafeCoercionEval', () => {
             array + obj;
           `));
         })
-        .to.throw(TypeError, 'Unexpected coercion of type "Array" and type "Object" using "+" operator');
+          .to.throw(TypeError, 'Unexpected coercion of type "Array" and type "Object" using "+" operator');
 
         chaiExpect(() => {
           eval(transform(`
@@ -361,7 +351,7 @@ describe('SafeCoercionEval', () => {
             array() + obj();
           `));
         })
-        .to.throw(TypeError, 'Unexpected coercion of type "Array" and type "Object" using "+" operator');
+          .to.throw(TypeError, 'Unexpected coercion of type "Array" and type "Object" using "+" operator');
       });
 
       it('should fail on unsafe coercion in function declaration', () => {
@@ -375,7 +365,7 @@ describe('SafeCoercionEval', () => {
             some()
           `));
         })
-        .to.throw(TypeError, 'Unexpected coercion of type "Array" and type "Object" using "+" operator');
+          .to.throw(TypeError, 'Unexpected coercion of type "Array" and type "Object" using "+" operator');
       });
     });
   }
