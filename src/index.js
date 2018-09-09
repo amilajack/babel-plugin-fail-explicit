@@ -127,13 +127,13 @@ export default function ({ types: t }: Object) {
         }
 
         if (
-          path.node.operator === '===' ||
-          path.node.operator === '==' ||
-          path.node.operator === '=' ||
-          path.node.operator === '!=' ||
-          path.node.operator === '!==' ||
-          path.node.operator === 'instanceof' ||
-          path.node.operator === 'in'
+          path.node.operator === '==='
+          || path.node.operator === '=='
+          || path.node.operator === '='
+          || path.node.operator === '!='
+          || path.node.operator === '!=='
+          || path.node.operator === 'instanceof'
+          || path.node.operator === 'in'
         ) {
           return;
         }
