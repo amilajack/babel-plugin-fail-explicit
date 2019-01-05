@@ -1,5 +1,6 @@
 // @flow
 import { declare } from '@babel/helper-plugin-utils';
+import { addDefault } from '@babel/helper-module-imports';
 import type { NodePath } from 'babel-traverse';
 
 
@@ -10,8 +11,8 @@ import type { NodePath } from 'babel-traverse';
 export default declare(({ types: t }: Object) => ({
   visitor: {
     Program: {
-      exit(path: NodePath, state: Object) {
-        state.file.addImport('safe-access-check', 'default');
+      exit(path: NodePath) {
+        addDefault(path, 'safe-access-check', { nameHint: 'safeAccessCheck' });
       }
     },
     /**

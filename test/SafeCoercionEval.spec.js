@@ -10,8 +10,7 @@ export const defaultConfig = {
   plugins: [
     [babelPluginFailExplicit, {
       commonJSImports: true
-    }],
-    'transform-es2015-modules-commonjs'
+    }]
   ],
   generatorOpts: {
     quotes: 'double',
@@ -26,8 +25,7 @@ export const configs = [
   {
     testConfigName: 'commonjs',
     plugins: [
-      [babelPluginFailExplicit, { commonJSImports: true }],
-      'transform-es2015-modules-commonjs'
+      [babelPluginFailExplicit, { commonJSImports: true }]
     ]
   },
   {
@@ -36,74 +34,37 @@ export const configs = [
   },
   {
     testConfigName: 'babel preset node 4',
-    presets: [['env', { targets: { node: 4 } }]],
+    presets: [['@babel/preset-env', { targets: { node: 4 } }]],
     plugins: [
-      [babelPluginFailExplicit, { commonJSImports: true }],
-      'transform-es2015-modules-commonjs'
-    ]
-  },
-  {
-    testConfigName: 'babel preset node 5',
-    presets: [['env', { targets: { node: 5 } }]],
-    plugins: [
-      [babelPluginFailExplicit, { commonJSImports: true }],
-      'transform-es2015-modules-commonjs'
-    ]
-  },
-  {
-    testConfigName: 'babel preset node 6',
-    presets: [['env', { targets: { node: 6 } }]],
-    plugins: [
-      [babelPluginFailExplicit, { commonJSImports: true }],
-      'transform-es2015-modules-commonjs'
-    ]
-  },
-  {
-    testConfigName: 'babel preset node 7',
-    presets: [['env', { targets: { node: 7 } }]],
-    plugins: [
-      [babelPluginFailExplicit, { commonJSImports: true }],
-      'transform-es2015-modules-commonjs'
-    ]
-  },
-  {
-    testConfigName: 'stage-0',
-    presets: ['stage-0'],
-    plugins: [
-      [babelPluginFailExplicit, { commonJSImports: true }],
-      'transform-es2015-modules-commonjs'
-    ]
-  },
-  {
-    testConfigName: 'es2015,stage-0',
-    presets: ['es2015', 'stage-0'],
-    plugins: [
-      [babelPluginFailExplicit, { commonJSImports: true }],
-      'transform-es2015-modules-commonjs'
-    ]
-  },
-  {
-    testConfigName: 'transform-es2015-modules-commonjs',
-    plugins: [
-      [babelPluginFailExplicit, { commonJSImports: true }],
-      'transform-es2015-modules-commonjs'
-    ]
-  },
-  {
-    testConfigName: 'transform-flow-strip-types',
-    presets: ['es2015'],
-    plugins: [
-      'transform-flow-strip-types',
-      'transform-es2015-modules-commonjs',
       [babelPluginFailExplicit, { commonJSImports: true }]
     ]
   },
   {
-    testConfigName: 'add-module-exports',
+    testConfigName: 'babel preset node 5',
+    presets: [['@babel/preset-env', { targets: { node: 5 } }]],
     plugins: [
-      [babelPluginFailExplicit, { commonJSImports: true }],
-      'add-module-exports',
-      'transform-es2015-modules-commonjs'
+      [babelPluginFailExplicit, { commonJSImports: true }]
+    ]
+  },
+  {
+    testConfigName: 'babel preset node 6',
+    presets: [['@babel/preset-env', { targets: { node: 6 } }]],
+    plugins: [
+      [babelPluginFailExplicit, { commonJSImports: true }]
+    ]
+  },
+  {
+    testConfigName: 'babel preset node 7',
+    presets: [['@babel/preset-env', { targets: { node: 7 } }]],
+    plugins: [
+      [babelPluginFailExplicit, { commonJSImports: true }]
+    ]
+  },
+  {
+    testConfigName: '@babel/preset-env',
+    presets: ['@babel/preset-env'],
+    plugins: [
+      [babelPluginFailExplicit, { commonJSImports: true }]
     ]
   },
   // @TODO
@@ -115,11 +76,10 @@ export const configs = [
   //   ]
   // },
   {
-    testConfigName: 'transform-async-to-bluebird',
+    testConfigName: '@babel/plugin-proposal-class-properties',
     plugins: [
       [babelPluginFailExplicit, { commonJSImports: true }],
-      'transform-es2015-modules-commonjs',
-      'transform-async-to-bluebird'
+      '@babel/plugin-proposal-class-properties'
     ]
   }
 ];

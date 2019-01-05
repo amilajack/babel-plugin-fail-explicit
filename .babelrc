@@ -1,14 +1,23 @@
 {
-  "presets": [["env", {
-    "targets": {
-      "node": 4
-    }
-  }]],
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "node": 10
+        }
+      }
+    ],
+    "@babel/preset-flow"
+  ],
   "plugins": [
-    "syntax-flow",
-    "transform-decorators-legacy",
-    "transform-runtime",
-    "add-module-exports",
-    "transform-flow-strip-types"
+    "@babel/plugin-syntax-flow",
+    [
+      "@babel/plugin-proposal-decorators",
+      {
+        "legacy": true
+      }
+    ],
+    "@babel/plugin-transform-runtime"
   ]
 }
