@@ -65,7 +65,7 @@
     "coveralls": "^3.0.2",
     "cross-env": "^5.2.0",
     "dedent": "^0.7.0",
-    "eslint": "^5.14.0",
+    "eslint": "^5.14.1",
     "eslint-config-bliss": "^2.3.0",
     "eslint-formatter-pretty": "^2.1.1",
     "flow-bin": "^0.80.0",
