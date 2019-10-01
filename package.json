@@ -74,7 +74,7 @@
   },
   "engines": {
     "node": ">=4.x",
-    "npm": ">=6.11.2"
+    "npm": ">=6.11.3"
   },
   "devEngines": {
     "node": ">=7.x",
