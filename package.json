@@ -39,7 +39,7 @@
   ],
   "homepage": "https://github.com/amilajack/babel-plugin-fail-explicit#readme",
   "dependencies": {
-    "@babel/helper-plugin-utils": "^7.0.0",
+    "@babel/helper-plugin-utils": "^7.8.3",
     "safe-access-check": "^0.0.15"
   },
   "devDependencies": {
