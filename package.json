@@ -70,7 +70,7 @@
     "eslint-formatter-pretty": "^2.1.1",
     "flow-bin": "^0.80.0",
     "flow-typed": "^2.6.2",
-    "jest-cli": "^23.6.0"
+    "jest-cli": "^25.1.0"
   },
   "engines": {
     "node": ">=4.x",
