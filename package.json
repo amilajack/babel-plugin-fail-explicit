@@ -68,7 +68,7 @@
     "eslint": "^5.16.0",
     "eslint-config-bliss": "^2.3.0",
     "eslint-formatter-pretty": "^2.1.1",
-    "flow-bin": "^0.80.0",
+    "flow-bin": "^0.121.0",
     "flow-typed": "^2.6.2",
     "jest-cli": "^23.6.0"
   },
