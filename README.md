@@ -23,7 +23,7 @@ npm install --save-dev babel-plugin-fail-explicit
 ```
 
 ## Setup
-```js
+```json
 // .babelrc
 {
   "plugins": [
@@ -69,14 +69,12 @@ null > undefined
 // ------------------------------------------------
 const obj = {
   foo: {
-    bar: {
-      baz: false
-    }
+    bar: {}
   }
 }
 
-obj.foo.bar._MOO_.baz;
-// TypeError: Property "_MOO_" does not exist in "Object.foo._MOO_"
+obj.foo.bar.baz;
+// TypeError: Property "baz" does not exist in "Object.foo.bar"
 
 
 // ------------------------------------------------
