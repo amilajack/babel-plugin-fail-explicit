@@ -25,7 +25,9 @@
     "fail",
     "explicit",
     "coercion",
-    "silent"
+    "silent",
+    "strict",
+    "check"
   ],
   "author": "Amila Welihinda",
   "license": "MIT",
@@ -64,13 +66,17 @@
   "eslintConfig": {
     "extends": "bliss"
   },
+  "engines": {
+    "node": ">=10"
+  },
+  "engineStrict": true,
   "babel": {
     "presets": [
       [
         "@babel/preset-env",
         {
           "targets": {
-            "node": 13
+            "node": 10
           }
         }
       ],

@@ -3,8 +3,6 @@ variables:
 
 strategy:
   matrix:
-    node_stable_8:
-      nodeVersion: '8.x'
     node_current_10:
       nodeVersion: '10.x'
     node_current_13:
