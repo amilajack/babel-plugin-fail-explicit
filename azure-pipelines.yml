@@ -3,27 +3,12 @@ variables:
 
 strategy:
   matrix:
-    linux_node_stable:
-      imageName: 'ubuntu-16.04'
+    node_stable_8:
       nodeVersion: '8.x'
-    linux_node_current:
-      imageName: 'ubuntu-16.04'
+    node_current_10:
+      nodeVersion: '10.x'
+    node_current_13:
       nodeVersion: '13.x'
-    mac_node_stable:
-      imageName: 'macos-10.13'
-      nodeVersion: '8.x'
-    mac_node_current:
-      imageName: 'macos-10.13'
-      nodeVersion: '13.x'
-    windows_node_stable:
-      imageName: 'vs2017-win2016'
-      nodeVersion: '8.x'
-    windows_node_current:
-      imageName: 'vs2017-win2016'
-      nodeVersion: '13.x'
-
-pool:
-  vmImage: $(imageName)
 
 steps:
   - task: NodeTool@0
