@@ -1,5 +1,5 @@
 // @flow
-/* eslint no-eval: 0, import/prefer-default-export: 0 */
+/* eslint no-eval: off, import/prefer-default-export: off */
 import * as babel from '@babel/core';
 import babelPluginFailExplicit from '../src';
 import { configs, defaultConfig } from './SafeCoercionEval.spec';

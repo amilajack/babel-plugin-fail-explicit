@@ -269,7 +269,7 @@ describe('SafeCoercionEval', () => {
       });
 
       it('should not fail on template literal coercion', () => {
-        /* eslint no-template-curly-in-string: 0 */
+        /* eslint no-template-curly-in-string: off */
         expect(
           eval(
             transform(
