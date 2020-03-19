@@ -1,16 +1,16 @@
 // @flow
-import { declare } from '@babel/helper-plugin-utils';
-import type { NodePath } from 'babel-traverse';
-
 /* eslint no-continue: off, func-names: off */
+import { declare } from '@babel/helper-plugin-utils';
+import { addSideEffect } from '@babel/helper-module-imports';
+import type { NodePath } from '@babel/traverse';
 
 // https://astexplorer.net/#/gist/a6acab67ec110ce0ebcfbbee7521de2a/779ae92132ef8c26e0b8f37e96ec83ab176d33f3
 
 export default declare(({ types: t }: Object) => ({
   visitor: {
     Program: {
-      exit(path: NodePath, state: Object) {
-        state.file.addImport('safe-access-check', 'default');
+      exit(path: NodePath) {
+        addSideEffect(path, 'safe-access-check');
       }
     },
     /**

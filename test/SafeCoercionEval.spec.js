@@ -1,20 +1,19 @@
 // @flow
-import * as babel from 'babel-core';
-import { expect as chaiExpect } from 'chai';
-import babelPluginFailExplicit from '../src/index';
+import * as babel from '@babel/core';
+import babelPluginFailExplicit from '../src';
 
 // eslint-disable-next-line jest/no-export
 export const defaultConfig = {
   compact: false,
   sourceType: 'module',
   plugins: [
+    '@babel/plugin-transform-modules-commonjs',
     [
       babelPluginFailExplicit,
       {
         commonJSImports: true
       }
-    ],
-    'transform-es2015-modules-commonjs'
+    ]
   ],
   generatorOpts: {
     quotes: 'double',
@@ -31,99 +30,83 @@ export const configs = [
     testConfigName: 'commonjs',
     plugins: [
       [babelPluginFailExplicit, { commonJSImports: true }],
-      'transform-es2015-modules-commonjs'
+      '@babel/plugin-transform-modules-commonjs'
     ]
   },
   {
-    testConfigName: 'es2015 preset',
-    presets: ['es2015']
+    testConfigName: 'env preset',
+    presets: ['@babel/preset-env']
   },
   {
     testConfigName: 'babel preset node 4',
-    presets: [['env', { targets: { node: 4 } }]],
+    presets: [['@babel/preset-env', { targets: { node: 8 } }]],
     plugins: [
       [babelPluginFailExplicit, { commonJSImports: true }],
-      'transform-es2015-modules-commonjs'
+      '@babel/plugin-transform-modules-commonjs'
     ]
   },
   {
     testConfigName: 'babel preset node 5',
-    presets: [['env', { targets: { node: 5 } }]],
+    presets: [['@babel/preset-env', { targets: { node: 10 } }]],
     plugins: [
       [babelPluginFailExplicit, { commonJSImports: true }],
-      'transform-es2015-modules-commonjs'
+      '@babel/plugin-transform-modules-commonjs'
     ]
   },
   {
     testConfigName: 'babel preset node 6',
-    presets: [['env', { targets: { node: 6 } }]],
+    presets: [['@babel/preset-env', { targets: { node: 12 } }]],
     plugins: [
       [babelPluginFailExplicit, { commonJSImports: true }],
-      'transform-es2015-modules-commonjs'
+      '@babel/plugin-transform-modules-commonjs'
     ]
   },
   {
     testConfigName: 'babel preset node 7',
-    presets: [['env', { targets: { node: 7 } }]],
+    presets: [['@babel/preset-env', { targets: { node: 13 } }]],
     plugins: [
       [babelPluginFailExplicit, { commonJSImports: true }],
-      'transform-es2015-modules-commonjs'
+      '@babel/plugin-transform-modules-commonjs'
     ]
   },
   {
-    testConfigName: 'stage-0',
-    presets: ['stage-0'],
+    testConfigName: '@babel/plugin-transform-modules-commonjs',
     plugins: [
       [babelPluginFailExplicit, { commonJSImports: true }],
-      'transform-es2015-modules-commonjs'
-    ]
-  },
-  {
-    testConfigName: 'es2015,stage-0',
-    presets: ['es2015', 'stage-0'],
-    plugins: [
-      [babelPluginFailExplicit, { commonJSImports: true }],
-      'transform-es2015-modules-commonjs'
-    ]
-  },
-  {
-    testConfigName: 'transform-es2015-modules-commonjs',
-    plugins: [
-      [babelPluginFailExplicit, { commonJSImports: true }],
-      'transform-es2015-modules-commonjs'
+      '@babel/plugin-transform-modules-commonjs'
     ]
   },
   {
     testConfigName: 'transform-flow-strip-types',
-    presets: ['es2015'],
+    presets: ['@babel/preset-env'],
     plugins: [
-      'transform-flow-strip-types',
-      'transform-es2015-modules-commonjs',
-      [babelPluginFailExplicit, { commonJSImports: true }]
+      [babelPluginFailExplicit, { commonJSImports: true }],
+      '@babel/plugin-transform-flow-strip-types',
+      '@babel/plugin-transform-modules-commonjs'
     ]
   },
   {
     testConfigName: 'add-module-exports',
     plugins: [
       [babelPluginFailExplicit, { commonJSImports: true }],
-      'add-module-exports',
-      'transform-es2015-modules-commonjs'
+      'babel-plugin-add-module-exports',
+      '@babel/plugin-transform-modules-commonjs'
     ]
   },
   // @TODO
   // {
-  //   testConfigName: 'transform-es2015-modules-umd',
+  //   testConfigName: '@babel/plugin-transform-es2015-modules-umd',
   //   plugins: [
   //     [babelPluginFailExplicit, { commonJSImports: true }],
-  //     'transform-es2015-modules-umd'
+  //     '@babel/plugin-transform-es2015-modules-umd'
   //   ]
   // },
   {
     testConfigName: 'transform-async-to-bluebird',
     plugins: [
       [babelPluginFailExplicit, { commonJSImports: true }],
-      'transform-es2015-modules-commonjs',
-      'transform-async-to-bluebird'
+      '@babel/plugin-transform-modules-commonjs',
+      'babel-plugin-transform-async-to-bluebird'
     ]
   }
 ];
@@ -166,52 +149,52 @@ describe('SafeCoercionEval', () => {
 
       describe('Multiple Operators', () => {
         it('should work with multiplication operator', () => {
-          chaiExpect(() => {
+          expect(() => {
             eval(
               transform(`
               'some' * 12;
             `)
             );
-          }).to.throw(
+          }).toThrow(
             TypeError,
             'Unexpected coercion of type "string" and type "number" using "*" operator'
           );
         });
 
         it('should work with division operator', () => {
-          chaiExpect(() => {
+          expect(() => {
             eval(
               transform(`
               'some' / 12;
             `)
             );
-          }).to.throw(
+          }).toThrow(
             TypeError,
             'Unexpected coercion of type "string" and type "number" using "/" operator'
           );
         });
 
         it('should work with exponent operator', () => {
-          chaiExpect(() => {
+          expect(() => {
             eval(
               transform(`
               'some' ** 12;
             `)
             );
-          }).to.throw(
+          }).toThrow(
             TypeError,
             'Unexpected coercion of type "string" and type "number" using "**" operator'
           );
         });
 
         it('should work with subtraction operator', () => {
-          chaiExpect(() => {
+          expect(() => {
             eval(
               transform(`
               'some' - 12;
             `)
             );
-          }).to.throw(
+          }).toThrow(
             TypeError,
             'Unexpected coercion of type "string" and type "number" using "-" operator'
           );
@@ -256,7 +239,7 @@ describe('SafeCoercionEval', () => {
         });
 
         it('should fail on comparison of unexpected types', () => {
-          chaiExpect(() => {
+          expect(() => {
             eval(
               transform(`
               (() => {
@@ -266,7 +249,7 @@ describe('SafeCoercionEval', () => {
               })()
               `)
             );
-          }).to.throw(
+          }).toThrow(
             TypeError,
             'Unexpected comparison of type "Object" and type "Array" using ">=" operator'
           );
@@ -302,27 +285,27 @@ describe('SafeCoercionEval', () => {
       });
 
       it('should fail on coercion with += operator', () => {
-        chaiExpect(() => {
+        expect(() => {
           eval(
             transform(`
             let some = {};
             some += 'moo';
           `)
           );
-        }).to.throw(
+        }).toThrow(
           TypeError,
           'Unexpected coercion of type "Object" and type "string" using "+=" operator'
         );
       });
 
       it('should fail on coercion in constructor', () => {
-        chaiExpect(() => {
+        expect(() => {
           eval(
             transform(`
             new String('some' + {})
           `)
           );
-        }).to.throw(
+        }).toThrow(
           TypeError,
           'Unexpected coercion of type "string" and type "Object" using "+" operator'
         );
@@ -337,52 +320,52 @@ describe('SafeCoercionEval', () => {
       });
 
       it('should fail with new operator', () => {
-        chaiExpect(() => {
+        expect(() => {
           eval(
             transform(`
             (new Array()) + (new Array())
           `)
           );
-        }).to.throw(
+        }).toThrow(
           TypeError,
           'Unexpected coercion of type "Array" and type "Array" using "+" operator'
         );
       });
 
       it('should fail with null', () => {
-        chaiExpect(() => {
+        expect(() => {
           eval(
             transform(`
             (null) + (null)
           `)
           );
-        }).to.throw(
+        }).toThrow(
           TypeError,
           'Unexpected coercion of type "null" and type "null" using "+" operator'
         );
       });
 
       it('should fail with NaN', () => {
-        chaiExpect(() => {
+        expect(() => {
           eval(
             transform(`
             (NaN) + (NaN)
           `)
           );
-        }).to.throw(
+        }).toThrow(
           TypeError,
           'Unexpected coercion of type "NaN" and type "NaN" using "+" operator'
         );
       });
 
       it('should fail with undefined', () => {
-        chaiExpect(() => {
+        expect(() => {
           eval(
             transform(`
             (undefined) + (undefined)
           `)
           );
-        }).to.throw(
+        }).toThrow(
           TypeError,
           'Unexpected coercion of type "undefined" and type "undefined" using "+" operator'
         );
@@ -404,7 +387,7 @@ describe('SafeCoercionEval', () => {
       });
 
       it('should throw error on unsafe coercion', () => {
-        chaiExpect(() => {
+        expect(() => {
           eval(
             transform(`
             var array = [];
@@ -412,12 +395,12 @@ describe('SafeCoercionEval', () => {
             array + obj;
           `)
           );
-        }).to.throw(
+        }).toThrow(
           TypeError,
           'Unexpected coercion of type "Array" and type "Object" using "+" operator'
         );
 
-        chaiExpect(() => {
+        expect(() => {
           eval(
             transform(`
             var array = function () { return [] };
@@ -425,14 +408,14 @@ describe('SafeCoercionEval', () => {
             array() + obj();
           `)
           );
-        }).to.throw(
+        }).toThrow(
           TypeError,
           'Unexpected coercion of type "Array" and type "Object" using "+" operator'
         );
       });
 
       it('should fail on unsafe coercion in function declaration', () => {
-        chaiExpect(() => {
+        expect(() => {
           eval(
             transform(`
             function some() {
@@ -443,7 +426,7 @@ describe('SafeCoercionEval', () => {
             some()
           `)
           );
-        }).to.throw(
+        }).toThrow(
           TypeError,
           'Unexpected coercion of type "Array" and type "Object" using "+" operator'
         );

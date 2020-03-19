@@ -9,14 +9,13 @@
   },
   "scripts": {
     "build": "cross-env NODE_ENV=production rm -rf lib && mkdir lib && babel src/index.js --out-file lib/index.js --source-maps",
-    "build-watch": "npm run build -- --watch",
-    "coverage": "npm run spec -- --coverage && nyc report --temp-directory=coverage --reporter=text-lcov | coveralls",
+    "build-watch": "yarn build -- --watch",
     "flow": "flow",
     "flow-typed": "flow-typed install",
     "lint": "eslint --cache .",
-    "spec": "cross-env BABEL_DISABLE_CACHE=1 NODE_ENV=test jest",
-    "test": "cross-env BABEL_DISABLE_CACHE=1 NODE_ENV=test npm run lint && npm run spec",
-    "version": "npm run build"
+    "spec": "jest",
+    "test": "yarn lint && yarn spec",
+    "version": "yarn build"
   },
   "jest": {
     "testEnvironment": "node"
@@ -39,47 +38,53 @@
   ],
   "homepage": "https://github.com/amilajack/babel-plugin-fail-explicit#readme",
   "dependencies": {
+    "@babel/helper-module-imports": "^7.8.3",
     "@babel/helper-plugin-utils": "^7.8.3",
     "safe-access-check": "^0.0.15"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.3",
+    "@babel/cli": "^7.0.0",
+    "@babel/core": "^7.0.0",
+    "@babel/plugin-transform-modules-commonjs": "^7.8.3",
+    "@babel/plugin-transform-modules-umd": "^7.0.0",
+    "@babel/plugin-transform-runtime": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "@babel/preset-flow": "^7.0.0",
+    "@babel/traverse": "^7.8.6",
+    "@babel/types": "^7.0.0",
     "babel-eslint": "^10.1.0",
     "babel-plugin-add-module-exports": "^1.0.2",
     "babel-plugin-transform-async-to-bluebird": "^1.1.1",
-    "babel-plugin-transform-decorators-legacy": "^1.3.5",
-    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
-    "babel-plugin-transform-es2015-modules-umd": "^6.24.1",
-    "babel-plugin-transform-flow-strip-types": "^6.22.0",
     "babel-plugin-transform-promise-to-bluebird": "^2.0.0",
-    "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-polyfill": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-preset-stage-0": "^6.24.1",
-    "babel-register": "^6.26.0",
-    "babel-traverse": "^6.26.0",
-    "babel-types": "^6.26.0",
-    "chai": "^4.2.0",
-    "coveralls": "^3.0.11",
     "cross-env": "^7.0.2",
-    "dedent": "^0.7.0",
     "eslint": "^6.8.0",
     "eslint-config-bliss": "^4.7.0",
     "flow-bin": "^0.121.0",
     "flow-typed": "^3.1.0",
-    "jest-cli": "^25.1.0"
+    "jest": "^25.1.0"
   },
   "engines": {
-    "node": ">=4.x",
-    "npm": ">=6.14.1"
+    "node": ">=13.x",
+    "npm": ">=6.x"
   },
   "devEngines": {
-    "node": ">=7.x",
-    "npm": ">=4.x"
+    "node": ">=13.x",
+    "npm": ">=6.x"
   },
   "eslintConfig": {
     "extends": "bliss"
+  },
+  "babel": {
+    "presets": [
+      [
+        "@babel/preset-env",
+        {
+          "targets": {
+            "node": 13
+          }
+        }
+      ],
+      "@babel/preset-flow"
+    ]
   }
 }
