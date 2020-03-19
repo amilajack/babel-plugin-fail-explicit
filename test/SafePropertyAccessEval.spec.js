@@ -1,19 +1,16 @@
 // @flow
-import * as babel from 'babel-core';
-import { expect as chaiExpect } from 'chai';
-import babelPluginFailExplicit from '../src/index';
+/* eslint no-eval: off, import/prefer-default-export: off */
+import * as babel from '@babel/core';
+import babelPluginFailExplicit from '../src';
 import { configs, defaultConfig } from './SafeCoercionEval.spec';
 
-
-/* eslint no-eval: 0, import/prefer-default-export: 0 */
-
+// eslint-disable-next-line jest/no-export
 export const babelConfig = {
   compact: false,
   sourceType: 'module',
   plugins: [
-    [babelPluginFailExplicit, {
-      commonJSImports: true
-    }]
+    '@babel/plugin-transform-modules-commonjs',
+    babelPluginFailExplicit
   ],
   generatorOpts: {
     quotes: 'double',
@@ -26,135 +23,159 @@ describe('SafePropertyAccessEval', () => {
     describe(`Config "${config.testConfigName}"`, () => {
       function transform(code: string): string {
         delete config.testConfigName;
-        return babel.transform(
-          code,
-          Object.assign({}, defaultConfig, config)
-        )
-          .code;
+        return babel.transformSync(code, { ...defaultConfig, ...config }).code;
       }
       describe('Basic Tests', () => {
         describe('Object Access', () => {
           it('should fail on incorrect property access', () => {
-            chaiExpect(() => {
-              eval(transform(`
+            expect(() => {
+              eval(
+                transform(`
                 const some = {}
                 some.soo
-              `));
-            })
-              .to.throw(TypeError, 'Property "soo" does not exist in "Object"');
+              `)
+              );
+            }).toThrow(TypeError, 'Property "soo" does not exist in "Object"');
           });
         });
 
         describe('Array Access', () => {
           it('should pass on in bound property access', () => {
-            eval(transform(`
-              const some = [[]]
-              some[0]
-            `));
-
-            eval(transform(`
-              const some = [[[]]]
-              some[0][0]
-            `));
+            expect(() => {
+              eval(
+                transform(`
+                const some = [[]]
+                some[0]
+              `)
+              );
+              eval(
+                transform(`
+                const some = [[[]]]
+                some[0][0]
+              `)
+              );
+            }).not.toThrow();
           });
 
           it('should pass on valid iife as property access', () => {
-            transform(`
+            expect(() => {
+              transform(`
               (() => {
                 const fn = () => 1
                 const some = [1, 2]
                 return some[fn()]
               })()
             `);
+            }).not.toThrow();
           });
 
           it('should fail on out out of bounds property access', () => {
-            chaiExpect(() => {
-              eval(transform(`
+            expect(() => {
+              eval(
+                transform(`
                 const some = []
                 some[2]
-              `));
-            })
-              .to.throw(TypeError, '"Array[2]" is out of bounds');
+              `)
+              );
+            }).toThrow(TypeError, '"Array[2]" is out of bounds');
           });
 
           it('should fail on multiple dimentional array access', () => {
-            chaiExpect(() => {
-              eval(transform(`
+            expect(() => {
+              eval(
+                transform(`
                 const some = [[[]]]
                 some[0][0][2]
-              `));
-            })
-              .to.throw(TypeError, '"Array[0][0][2]" is out of bounds');
+              `)
+              );
+            }).toThrow(TypeError, '"Array[0][0][2]" is out of bounds');
           });
 
           it('should fail on out of bounds on new Array()', () => {
-            chaiExpect(() => {
-              eval(transform(`
+            expect(() => {
+              eval(
+                transform(`
                 const some = new Array(3)
                 some[10]
-              `));
-            })
-              .to.throw(TypeError, '"Array[10]" is out of bounds');
+              `)
+              );
+            }).toThrow(TypeError, '"Array[10]" is out of bounds');
           });
 
           it('should pass on valid multiple dimentional array access', () => {
-            chaiExpect(eval(transform(`
+            expect(
+              eval(
+                transform(`
               (() => {
                 const some = [[[['moo']]]]
                 return some[0][0][0][0]
               })()
-            `)))
-              .to.equal('moo');
+            `)
+              )
+            ).toEqual('moo');
           });
         });
 
         describe('Mixed Access', () => {
           it('should fail on incorrect property access', () => {
-            chaiExpect(() => {
-              eval(transform(`
+            expect(() => {
+              eval(
+                transform(`
                 const some = {}
                 some.soo
-              `));
-            })
-              .to.throw(TypeError, 'Property "soo" does not exist in "Object"');
+              `)
+              );
+            }).toThrow(TypeError, 'Property "soo" does not exist in "Object"');
           });
 
           it('should pass on valid property access', () => {
-            chaiExpect(eval(transform(`
+            expect(
+              eval(
+                transform(`
               (function() {
                 const some = {some:[{doo:['moo']}]}
                 return some.some[0].doo[0]
               })()
-            `)))
-              .to.equal('moo');
+            `)
+              )
+            ).toEqual('moo');
           });
         });
 
         describe('Invalid Access', () => {
           it('should fail on NaN property access', () => {
-            chaiExpect(() => {
-              eval(transform(`
+            expect(() => {
+              eval(
+                transform(`
                 const some = [0]
                 some[NaN]
-              `));
-            })
-              .to.throw(TypeError, 'Type "NaN" cannot be used to access "Array"');
+              `)
+              );
+            }).toThrow(
+              TypeError,
+              'Type "NaN" cannot be used to access "Array"'
+            );
           });
 
           describe('Square Bracket Notation', () => {
             it('should access square bracket notation properties', () => {
-              chaiExpect(() => {
-                eval(transform(`
+              expect(() => {
+                eval(
+                  transform(`
                   const some = {}
                   some['foo']
-                `));
-              })
-                .to.throw(TypeError, 'Property "foo" does not exist in "Object"');
+                `)
+                );
+              }).toThrow(
+                TypeError,
+                'Property "foo" does not exist in "Object"'
+              );
             });
 
             it('should access mixed properties', () => {
-              chaiExpect(eval(transform(`
+              expect(
+                eval(
+                  transform(`
                 (function() {
                   const some = {
                     foo: {
@@ -163,10 +184,13 @@ describe('SafePropertyAccessEval', () => {
                   }
                   return some['foo'].bar
                 })()
-              `)))
-                .to.equal('baz');
+              `)
+                )
+              ).toEqual('baz');
 
-              chaiExpect(eval(transform(`
+              expect(
+                eval(
+                  transform(`
                 (function() {
                   const some = {
                     foo: {
@@ -175,45 +199,58 @@ describe('SafePropertyAccessEval', () => {
                   }
                   return some['foo'].bar[0]
                 })()
-              `)))
-                .to.equal(0);
+              `)
+                )
+              ).toEqual(0);
             });
           });
 
           describe('Class', () => {
             it('should fail on incorrect class instance property access', () => {
-              chaiExpect(() => {
-                eval(transform(`
+              expect(() => {
+                eval(
+                  transform(`
                   class Foo {
                     soo() {}
                   }
                   const some = new Foo()
                   some.loo
-                `));
-              })
-                .to.throw(TypeError, 'Property "loo" does not exist in "Object"');
-              chaiExpect(() => {
-                eval(transform(`
+                `)
+                );
+              }).toThrow(
+                TypeError,
+                'Property "loo" does not exist in "Object"'
+              );
+              expect(() => {
+                eval(
+                  transform(`
                   class Foo {
                     soo() {}
                   }
                   Foo.loo
-                `));
-              })
-                .to.throw(TypeError, 'Property "loo" does not exist in "Function"');
+                `)
+                );
+              }).toThrow(
+                TypeError,
+                'Property "loo" does not exist in "Function"'
+              );
             });
 
             it('should fail on incorrect class static property access', () => {
-              chaiExpect(() => {
-                eval(transform(`
+              expect(() => {
+                eval(
+                  transform(`
                   class Foo {
                     static soo() {}
                   }
                   const some = new Foo()
                   Foo.loo
-                `));
-              })
-                .to.throw(TypeError, 'Property "loo" does not exist in "Function"');
+                `)
+                );
+              }).toThrow(
+                TypeError,
+                'Property "loo" does not exist in "Function"'
+              );
             });
           });
         });
@@ -221,62 +258,76 @@ describe('SafePropertyAccessEval', () => {
 
       describe('Default Value Propagation', () => {
         it('should propagate default values with "||"', () => {
-          chaiExpect(eval(transform(`
+          expect(
+            eval(
+              transform(`
             (() => {
               const some = {}
               return some.foo || 'bar'
             })()
-          `)))
-            .to.equal('bar');
+          `)
+            )
+          ).toEqual('bar');
         });
 
         it('should propagate default values with "&&"', () => {
-          chaiExpect(eval(transform(`
+          expect(
+            eval(
+              transform(`
             (() => {
               const some = {}
               return some.foo && 'bar'
             })()
-          `)))
-            .to.equal(undefined);
+          `)
+            )
+          ).toEqual(undefined);
         });
 
         it('should propagate in conditional test', () => {
-          chaiExpect(eval(transform(`
+          expect(
+            eval(
+              transform(`
             (() => {
               const some = {}
               if (some.foo || some.bar || some.baz) {}
               return true
             })()
-          `)))
-            .to.equal(true);
+          `)
+            )
+          ).toEqual(true);
 
-          chaiExpect(eval(transform(`
+          expect(
+            eval(
+              transform(`
             (() => {
               const some = {}
               if (some.foo && some.bar && some.baz) {}
               return true
             })()
-          `)))
-            .to.equal(true);
+          `)
+            )
+          ).toEqual(true);
         });
       });
 
       describe('Conditional Expressions', () => {
         it('should evaluate conditional expressions', () => {
-          chaiExpect(() => {
-            eval(transform(`
+          expect(() => {
+            eval(
+              transform(`
               (() => {
                 const some = {}
                 return some.foo ? true : false
               })()
-            `));
-          })
-            .to.throw(TypeError, 'Property "foo" does not exist in "Object"');
+            `)
+            );
+          }).toThrow(TypeError, 'Property "foo" does not exist in "Object"');
         });
 
         it('should fail on unsafe conditional access', () => {
-          chaiExpect(() => {
-            eval(transform(`
+          expect(() => {
+            eval(
+              transform(`
               (() => {
                 const some = {}
                 if (some.some === true) {
@@ -284,9 +335,9 @@ describe('SafePropertyAccessEval', () => {
                 }
                 return true
               })()
-            `));
-          })
-            .to.throw(TypeError, 'Property "some" does not exist in "Object"');
+            `)
+            );
+          }).toThrow(TypeError, 'Property "some" does not exist in "Object"');
         });
       });
     });

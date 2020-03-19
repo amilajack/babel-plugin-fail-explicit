@@ -10,8 +10,6 @@ babel-plugin-fail-explicit
 
 ![demo](https://raw.githubusercontent.com/amilajack/babel-plugin-fail-explicit-demo/7ed9a29ec61d505f2b3ce6be18145c74eb3bc5f5/demo.gif)
 
-**⚠️ Experimental ⚠️**
-
 ## Roadmap
 - [x] Fail on unsafe coercion
 - [x] Fail on unsafe property access
@@ -19,15 +17,13 @@ babel-plugin-fail-explicit
 - [ ] Allow unsafe access in if statement by default
 - [ ] Allow for configuration of strictness
 
-**⚠️ This doesn't work as expected with `"transform-es2015-modules-umd"` and **hot-reloading** at the moment ⚠️**
-
 ## Installation
 ```bash
 npm install --save-dev babel-plugin-fail-explicit
 ```
 
 ## Setup
-```js
+```json
 // .babelrc
 {
   "plugins": [
@@ -73,14 +69,12 @@ null > undefined
 // ------------------------------------------------
 const obj = {
   foo: {
-    bar: {
-      baz: false
-    }
+    bar: {}
   }
 }
 
-obj.foo.bar._MOO_.baz;
-// TypeError: Property "_MOO_" does not exist in "Object.foo._MOO_"
+obj.foo.bar.baz;
+// TypeError: Property "baz" does not exist in "Object.foo.bar"
 
 
 // ------------------------------------------------
