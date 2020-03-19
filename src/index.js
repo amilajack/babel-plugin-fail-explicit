@@ -2,8 +2,7 @@
 import { declare } from '@babel/helper-plugin-utils';
 import type { NodePath } from 'babel-traverse';
 
-
-/* eslint fp/no-loops: 0, no-continue: 0, func-names: 0, fp/no-let: 0 */
+/* eslint no-continue: off, func-names: off */
 
 // https://astexplorer.net/#/gist/a6acab67ec110ce0ebcfbbee7521de2a/779ae92132ef8c26e0b8f37e96ec83ab176d33f3
 
@@ -15,18 +14,18 @@ export default declare(({ types: t }: Object) => ({
       }
     },
     /**
-       * Used by safePropertyAccess
-       *
-       * http://2ality.com/2015/12/babel-commonjs.html
-       *
-       * BUG:
-       * var _safeAccessCheck = require('safe-access-check');
-       * var _safeAccessCheck2 = interopRequireDefault(_safeAccessCheck)
-       * _safeAccessCheck2.safePropertyAccess()
-       *
-       * @TODO: Enforce that call to safeCoerce() and safePropertyAccess()
-       *        ALWAYS come after the import
-       */
+     * Used by safePropertyAccess
+     *
+     * http://2ality.com/2015/12/babel-commonjs.html
+     *
+     * BUG:
+     * var _safeAccessCheck = require('safe-access-check');
+     * var _safeAccessCheck2 = interopRequireDefault(_safeAccessCheck)
+     * _safeAccessCheck2.safePropertyAccess()
+     *
+     * @TODO: Enforce that call to safeCoerce() and safePropertyAccess()
+     *        ALWAYS come after the import
+     */
     MemberExpression(path: Object, state: Object) {
       // Exit if safeCoerceCheck is disabled
       if (state.opts.safePropertyAccess === false) {
@@ -81,7 +80,7 @@ export default declare(({ types: t }: Object) => ({
       if (!id) {
         return;
       }
-      if (!(id.name)) {
+      if (!id.name) {
         if (!id.callee) {
           return;
         }
@@ -100,52 +99,63 @@ export default declare(({ types: t }: Object) => ({
       }
 
       try {
-        path.replaceWith(t.callExpression(
-          t.memberExpression(t.identifier('global'), t.identifier('safePropertyAccess')),
-          [
-            t.arrayExpression(items.reverse()),
-            t.identifier(id.name || id.callee.name)
-          ]
-        ));
+        path.replaceWith(
+          t.callExpression(
+            t.memberExpression(
+              t.identifier('global'),
+              t.identifier('safePropertyAccess')
+            ),
+            [
+              t.arrayExpression(items.reverse()),
+              t.identifier(id.name || id.callee.name)
+            ]
+          )
+        );
       } catch (error) {
-        throw new Error([
-          'This is an issue with "babel-plugin-fail-explicit"',
-          `Line "${path.node.loc.start}" in "${state.file.opts.filename}"`,
-          error
-        ].join('. '));
+        throw new Error(
+          [
+            'This is an issue with "babel-plugin-fail-explicit"',
+            `Line "${path.node.loc.start}" in "${state.file.opts.filename}"`,
+            error
+          ].join('. ')
+        );
       }
     },
 
     /**
-       * Used by safeCoerce
-       * @TODO: Support BinaryExpression|AssignmentExpression|UnaryExpression
-       */
-    'BinaryExpression|AssignmentExpression': function (path: NodePath, state: Object) {
+     * Used by safeCoerce
+     * @TODO: Support BinaryExpression|AssignmentExpression|UnaryExpression
+     */
+    'BinaryExpression|AssignmentExpression': function(
+      path: NodePath,
+      state: Object
+    ) {
       // Exit if safeCoerce is disabled
       if (state.opts.safeCoerce === false) {
         return;
       }
 
       if (
-        path.node.operator === '==='
-          || path.node.operator === '=='
-          || path.node.operator === '='
-          || path.node.operator === '!='
-          || path.node.operator === '!=='
-          || path.node.operator === 'instanceof'
-          || path.node.operator === 'in'
+        path.node.operator === '===' ||
+        path.node.operator === '==' ||
+        path.node.operator === '=' ||
+        path.node.operator === '!=' ||
+        path.node.operator === '!==' ||
+        path.node.operator === 'instanceof' ||
+        path.node.operator === 'in'
       ) {
         return;
       }
 
-      path.replaceWith(t.callExpression(
-        t.memberExpression(t.identifier('global'), t.identifier('safeCoerce')),
-        [
-          path.node.left,
-          t.stringLiteral(path.node.operator),
-          path.node.right
-        ]
-      ));
+      path.replaceWith(
+        t.callExpression(
+          t.memberExpression(
+            t.identifier('global'),
+            t.identifier('safeCoerce')
+          ),
+          [path.node.left, t.stringLiteral(path.node.operator), path.node.right]
+        )
+      );
     }
   }
 }));

@@ -13,7 +13,7 @@
     "coverage": "npm run spec -- --coverage && nyc report --temp-directory=coverage --reporter=text-lcov | coveralls",
     "flow": "flow",
     "flow-typed": "flow-typed install",
-    "lint": "eslint --cache --format=node_modules/eslint-formatter-pretty .",
+    "lint": "eslint --cache .",
     "spec": "cross-env BABEL_DISABLE_CACHE=1 NODE_ENV=test jest",
     "test": "cross-env BABEL_DISABLE_CACHE=1 NODE_ENV=test npm run lint && npm run spec",
     "version": "npm run build"
@@ -62,15 +62,14 @@
     "babel-traverse": "^6.26.0",
     "babel-types": "^6.26.0",
     "chai": "^4.2.0",
-    "coveralls": "^3.0.9",
-    "cross-env": "^5.2.1",
+    "coveralls": "^3.0.11",
+    "cross-env": "^7.0.2",
     "dedent": "^0.7.0",
-    "eslint": "^5.16.0",
-    "eslint-config-bliss": "^2.3.0",
-    "eslint-formatter-pretty": "^2.1.1",
-    "flow-bin": "^0.80.0",
-    "flow-typed": "^2.6.2",
-    "jest-cli": "^23.6.0"
+    "eslint": "^6.8.0",
+    "eslint-config-bliss": "^4.7.0",
+    "flow-bin": "^0.121.0",
+    "flow-typed": "^3.1.0",
+    "jest-cli": "^25.1.0"
   },
   "engines": {
     "node": ">=4.x",
@@ -79,5 +78,8 @@
   "devEngines": {
     "node": ">=7.x",
     "npm": ">=4.x"
+  },
+  "eslintConfig": {
+    "extends": "bliss"
   }
 }
