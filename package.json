@@ -14,7 +14,7 @@
     "flow-typed": "flow-typed install",
     "lint": "eslint --cache .",
     "spec": "jest",
-    "test": "yarn lint && yarn spec",
+    "test": "yarn flow && yarn lint && yarn spec",
     "version": "yarn build"
   },
   "jest": {
