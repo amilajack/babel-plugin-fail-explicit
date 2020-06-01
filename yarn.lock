@@ -2900,10 +2900,10 @@ flow-bin@^0.114.0:
   resolved "https://registry.yarnpkg.com/flow-bin/-/flow-bin-0.114.0.tgz#9079c5fcdf08fab4db91616f38994e9b7d035842"
   integrity sha512-hewufX0nbnhemQn5XtJ97nEFNqoBclPBAZ54aY3jKuZJnLpwqB7Doaplet3M26TOh2NchBsU0+lUkM8oVna2VA==
 
-flow-bin@^0.123.0:
-  version "0.123.0"
-  resolved "https://registry.yarnpkg.com/flow-bin/-/flow-bin-0.123.0.tgz#7ba61a0b8775928cf4943ccf78eed2b1b05f7b3a"
-  integrity sha512-Ylcf8YDIM/KrqtxkPuq+f8O+6sdYA2Nuz5f+sWHlp539DatZz3YMcsO1EiXaf1C11HJgpT/3YGYe7xZ9/UZmvQ==
+flow-bin@^0.125.1:
+  version "0.125.1"
+  resolved "https://registry.yarnpkg.com/flow-bin/-/flow-bin-0.125.1.tgz#7edbc71e7dc39ddef18086ef75c714bbf1c5917f"
+  integrity sha512-jEury9NTXylxQEOAXLWEE945BjBwYcMwwKVnb+5XORNwMQE7i5hQYF0ysYfsaaYOa7rW/U16rHBfwLuaZfWV7A==
 
 flow-typed@^3.1.0:
   version "3.1.0"
