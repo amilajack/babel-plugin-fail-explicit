@@ -67,7 +67,7 @@
     "extends": "bliss"
   },
   "engines": {
-    "node": ">=v10.24.0"
+    "node": ">=v10.24.1"
   },
   "engineStrict": true,
   "babel": {
